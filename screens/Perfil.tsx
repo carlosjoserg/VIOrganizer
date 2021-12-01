@@ -1,11 +1,14 @@
-import * as React from "react";
-import { useState } from "react";
-import { Text, View, StyleSheet, Image, Switch, Alert, TouchableOpacity } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as React from 'react';
+import { useState } from 'react';
+import { Text, View, StyleSheet, Image, Switch, Alert, TouchableOpacity} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Avatar } from "react-native-elements";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
+
+import firebase from "../lib/firebase";
 
 const PERFIL_DATA = {
   id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
@@ -17,13 +20,49 @@ const PERFIL_DATA = {
 };
 
 export default function Perfil() {
+
+  const [current_user, setUser] = useState([]);
+
+  useEffect(() => {
+    firebase.db.collection("users").onSnapshot((querySnapshot) => {
+      const users = [];
+      querySnapshot.docs.forEach((doc) => {
+        const { name, email, phone } = doc.data();
+        users.push({
+          id: doc.id,
+          name,
+          email,
+          phone,
+        });
+      });
+      setUsers(users);
+    });
+  }, []);
+
+  const initalState = {
+    nombre: "",
+    direccion: "",
+    telefono: "",
+    nro_socio: "",
+    tengo_coche: "",
+    plazas_libres_coche: 3,
+  };
+
+  const handleChangeText = (value, name) => {
+    setState({ ...state, [name]: value });
+  };
+
+  const [state, setState] = useState(initalState);
+
   const insets = useSafeAreaInsets();
   const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   return (
-    <View style={[{ marginTop: insets.top }, { flexDirection: "column" }, styles.container]}>
-      <Image style={styles.logo} source={require("../assets/snack-icon.png")} />
-      <Text style={styles.nombre}>{PERFIL_DATA.nombre}</Text>
+    <View style={[{marginTop: insets.top}, {flexDirection: 'column'}, styles.container]}>
+      <Avatar source={require('../assets/snack-icon.png')} rounded />
+      <Text style={styles.nombre}>
+        {PERFIL_DATA.nombre}
+      </Text>
 
       <Text style={styles.socio}>Socio #{PERFIL_DATA.nro_socio}</Text>
 
@@ -53,6 +92,7 @@ export default function Perfil() {
 
         {!isEnabled && <FontAwesome name="car" size={40} color="lightgrey" />}
       </View>
+
     </View>
   );
 }
@@ -93,5 +133,5 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     margin: 20,
-  },
+  }
 });
