@@ -10,7 +10,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Card } from "react-native-paper";
 
-type SalidasDato = {
+interface SalidasDato {
 	id: string;
 	title: string;
 	refugio: string;
@@ -24,7 +24,7 @@ type SalidasDato = {
 	asientos_libres: string;
 	apuntado: boolean;
 	confirmado: boolean;
-};
+}
 
 const SALIDAS_DATA : SalidasDato[]= [
 	{
@@ -152,7 +152,7 @@ const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 	},
 ];
 
-const Salida = ({ salida }) => (
+const Salida = ({ salida }: SalidasDato) => (
 	<Card style={styles.cards}>
 		{/** El usuario puede apuntarse a varias, y se le confirma automáticamente de acuerdo a las necesidades 3 días antes, o manualmente por el referente */}
 		{!salida.apuntado && !salida.confirmado && (

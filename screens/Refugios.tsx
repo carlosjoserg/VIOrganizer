@@ -4,12 +4,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Constants from "expo-constants";
 import I18n from "../i18n";
 
-type RefugiosDato = {
+interface RefugiosDato {
 	id: string;
 	refugio: string;
 	nombre: string;
 	ubicacion: string;
-};
+}
 
 const REFUGIOS_DATA : RefugiosDato[] = [
 	{
@@ -77,8 +77,8 @@ const REFUGIOS_PUNTUAL_DATA : RefugiosDato[] = [
 	},
 ];
 
-const Refugio = ({ refugio }) => (
-	<TouchableOpacity onPress={() => Alert.alert("Informacion sobre " + refugio.nombre)}>
+const Refugio = ({ refugio }: RefugiosDato) => (
+	<TouchableOpacity onPress={() => Alert.alert("Informacion sobre " + {refugio}.nombre)}>
 		<View
 			style={[
 				{ flexDirection: "row" },
