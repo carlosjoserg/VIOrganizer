@@ -10,7 +10,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Card } from "react-native-paper";
 
-type Salidas = {
+type SalidasDato = {
 	id: string;
 	title: string;
 	refugio: string;
@@ -26,7 +26,7 @@ type Salidas = {
 	confirmado: boolean;
 };
 
-const SALIDAS_DATA = [
+const SALIDAS_DATA : SalidasDato[]= [
 	{
 		id: "bd7acbea-c1b1-46c2-aed5-3ad53ab111a",
 		title: "Salida #1",
@@ -104,7 +104,7 @@ const SALIDAS_DATA = [
 	},
 ];
 
-const SALIDAS_APUNTADAS_DATA = [
+const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 	{
 		id: "bd7acbea-c1b1-46c2-aed5-3ad5666b28ba",
 		title: "Salida #1",

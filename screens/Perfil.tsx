@@ -8,8 +8,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import firebase from "../lib/firebase";
-
 const PERFIL_DATA = {
   id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
   nombre: "John Doe",
@@ -22,22 +20,6 @@ const PERFIL_DATA = {
 export default function Perfil() {
 
   const [current_user, setUser] = useState([]);
-
-  useEffect(() => {
-    firebase.db.collection("users").onSnapshot((querySnapshot) => {
-      const users = [];
-      querySnapshot.docs.forEach((doc) => {
-        const { name, email, phone } = doc.data();
-        users.push({
-          id: doc.id,
-          name,
-          email,
-          phone,
-        });
-      });
-      setUsers(users);
-    });
-  }, []);
 
   const initalState = {
     nombre: "",
