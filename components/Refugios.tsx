@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Text, View, StyleSheet, Image, ScrollView, FlatList, TouchableOpacity, Alert } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Refugios = {
   id: string;
@@ -93,10 +92,9 @@ const Refugio = (refugio: Refugios) => (
 );
 
 export default function Refugios() {
-  const insets = useSafeAreaInsets();
   const renderItem = ({ item }) => <Refugio refugio={item} />;
   return (
-    <ScrollView style={[{ marginTop: insets.top }, styles.scrollView]} stickyHeaderIndices={[0]}>
+    <ScrollView style={styles.scrollView} stickyHeaderIndices={[0]}>
       {/* sticky header */}
       <View style={[{ backgroundColor: "white" }, { alignItems: "center" }]}>
         <Image style={styles.logo} source={require("../assets/logo.jpg")} />
