@@ -1,58 +1,185 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { Text, View, StyleSheet, Image, Switch, Alert, TouchableOpacity} from 'react-native';
+import { useState, useRef, useEffect } from 'react';
+import { Text, TextInput, View, StyleSheet, Image, Switch, Alert, Keyboard, TouchableOpacity, TouchableWithoutFeedback, Dimensions, InteractionManager} from 'react-native';
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Modal from "react-native-modal";
+import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
+import { Avatar } from "react-native-elements";
+import Dialog, { DialogButton, DialogContent } from 'react-native-popup-dialog';
+import NumericInput from 'react-native-numeric-input';
 
-import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 
-const PERFIL_DATA = {
-	id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-	nombre: 'John Doe',
-	casa: 'Paseo San Juan 116, 08027 Barcelona',
-	nro_socio: '84',
-	tengo_coche: false,
-	plazas_coche: 4,
-};
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons';
+
+import firebase from "../lib/firebase";
 
 export default function Perfil() {
 
-	const [current_user, setUser] = useState([]);
-
-	const initalState = {
-		nombre: "",
-		direccion: "",
-		telefono: "",
-		nro_socio: "",
-		tengo_coche: "",
-		plazas_coche: 0,
+  {/** definir collección de roles y de usuarios, y las pantallas tendrán diferentes opciones de acuerdo a los roles */}
+  {/** definir collección de roles y de usuarios, y las pantallas tendrán diferentes opciones de acuerdo a los roles */}
+	var initalState = {
+    movil: '606909265',
+    nombre: 'John Doe',
+    casa: {latitude: 41.4004358, longitude: 2.1665522, latitudeDelta: 0.01, longitudeDelta: 0.01},
+    nro_socio: '84',
+    roles: ['socio',],
+    tengo_coche: true,
+    plazas_coche: 4
 	};
-
-	const handleChangeText = (value, name) => {
-		setState({ ...state, [name]: value });
-	};
-
 	const [state, setState] = useState(initalState);
 
+  const createUser = async () => {
+      try {
+        await firebase.db.collection("users").add(state);
+
+      } catch (error) {
+        console.log(error)
+      }
+  };
+
+  const [plazasVisible, setPlazasVisible] = useState([]);
+  const [casaVisible, setCasaVisible] = useState([]);
+
 	const insets = useSafeAreaInsets();
-	const [isEnabled, setIsEnabled] = useState(true);
+	const [isEnabled, setIsEnabled] = useState(state.tengo_coche);
 	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  const updateInfo = async () => {
+    const userRef = firebase.db.collection("users").doc(state.movil);
+    await userRef.set(state);
+  };
+
+  const getUserById = async () => {
+    const dbRef = firebase.db.collection("users").doc(state.movil);
+    const doc = await dbRef.get();
+    const user = doc.data();
+  };
+
 	return (
 		<View style={[{marginTop: insets.top}, {flexDirection: 'column'}, styles.container]}>
-			<Image source={require('../assets/snack-icon.png')} />
-			<Text style={styles.nombre}>{PERFIL_DATA.nombre}</Text>
 
-			<Text style={styles.socio}>Socio #{PERFIL_DATA.nro_socio}</Text>
-			<TouchableOpacity onPress={() => Alert.alert('Cambiar dirección habitual: ' + PERFIL_DATA.casa)}>
+      {/** Modal para cambiar numero de plazas, solo permite cambiar si no está apuntado a una salida */}
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={plazasVisible}
+          onBackdropPress={() => {setPlazasVisible(false); updateInfo();}} >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>{"Número de plazas libres:"}</Text>
+              <NumericInput
+                value={state.plazas_coche}
+                onChange={value => {setState({...state,plazas_coche: value});}}
+                minValue={0}
+                maxValue={9}
+                totalWidth={240}
+                totalHeight={50}
+                iconSize={25}
+                step={1}
+                type='plus-minus'
+                editable={true}
+                valueType='integer'
+                rounded
+                textColor='#B0228C'
+                iconStyle={{ color: 'white' }}
+                rightButtonBackgroundColor='tomato'
+                leftButtonBackgroundColor='orange'/>
+            </View>
+          </View>
+        </Modal>
+      </View>
+
+      {/** Modal para cambiar dirección, solo permite cambiar si no está confirmado a una salida */}
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={casaVisible}
+          onBackdropPress={() => {setCasaVisible(false); }} >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>{"Haz click en tu ubicación habitual:"}</Text>
+              {/** DEBUGING COORDS <Text style={styles.modalText}>{state.casa.latitude}, {state.casa.longitude}, {state.casa.latitudeDelta}, {state.casa.longitudeDelta}</Text> */}
+              <View style={styles.container}>
+                <MapView
+                    style={styles.map}
+                    liteMode={false}
+                    mapType={"standard"}
+                    showsUserLocation={true}
+                    showsMyLocationButton={true}
+                    region={state.casa}
+                    onPress={ e => {setState({...state,
+                                                casa: {
+                                                    latitude: e.nativeEvent.coordinate.latitude,
+                                                    longitude: e.nativeEvent.coordinate.longitude,
+                                                    latitudeDelta: state.casa.latitudeDelta,
+                                                    longitudeDelta: state.casa.longitudeDelta
+                                                }
+                                              }
+                                            );
+                                    setCasaVisible(false);
+                                    updateInfo();
+                                        }
+                                    }
+                    onRegionChangeComplete={ e => {setState({...state,
+                                                        casa: {
+                                                            latitude: e.latitude,
+                                                            longitude: e.longitude,
+                                                            latitudeDelta: e.latitudeDelta,
+                                                            longitudeDelta: e.longitudeDelta
+                                                        }
+                                                    }
+                                                );
+                                            updateInfo();
+                                                }
+                                            }
+                    />
+              </View>
+
+            </View>
+          </View>
+        </Modal>
+      </View>
+
+			<Avatar source={require('../assets/snack-icon.png')} rounded size="xlarge" />
+			<Text style={styles.nombre}>{state.nombre}</Text>
+
+			<Text style={styles.socio}>Socio #{state.nro_socio}</Text>
+
+			<TouchableOpacity onPress={() => {setCasaVisible(true);}}>
 				<View style={[{flexDirection: 'column'}]}>
-					<MaterialIcons style={[{textAlign: 'center'}]} name="home" size={50} color="black" />
-					<Text style={styles.casa}>{PERFIL_DATA.casa}</Text>
+          {/**<Entypo style={[{textAlign: 'center'}]} name="location" size={50} color="black" />
+					<Text style={styles.casa}>{state.casa.latitude}, {state.casa.longitude}</Text> */}
+          <View style={styles.container}>
+                <MapView
+                    style={styles.mapthumb}
+                    mapType={"standard"}
+                    region={state.casa} >
+                        <Marker
+                          key={111}
+                          coordinate={{ latitude : state.casa.latitude , longitude : state.casa.longitude }}
+                          >
+                          <View>
+                            <Entypo style={[{textAlign: 'center'}]} name="location" size={50} color="tomato" />
+                          </View>
+                          </Marker>
+
+                    </MapView>
+              </View>
 				</View>
 			</TouchableOpacity>
 
 			<View style={[{flexDirection: 'row'}, {alignContent: 'center'}, {alignItems: 'center'}]}>
-				<FontAwesome5 name="walking" size={40} color={isEnabled ? 'lightgrey' : 'black'} />
+				<FontAwesome5 name="walking" size={40} color={isEnabled ? 'lightgrey' : 'tomato'} />
 				<Switch style={styles.selector}
 					trackColor={{ false: '#767577', true: '#767577' }}
 					thumbColor={isEnabled ? '#f5dd4b' : '#f5dd4b'}
@@ -61,14 +188,22 @@ export default function Perfil() {
 					value={isEnabled} />
 
 				{isEnabled &&
-					<TouchableOpacity onPress={() => console.log('Plazas disponibles? ' + PERFIL_DATA.plazas_coche)}>
-						<FontAwesome name="car" size={40} color='black' />
+					<TouchableOpacity onPress={() => { setPlazasVisible(true);}}>
+            <View style={{flexDirection: 'row'}}>
+              <FontAwesome name="car" size={40} color='tomato' />
+              <MaterialCommunityIcons name="car-seat" size={18} color="tomato" />
+              <Text style={[{color: 'tomato'}]}>x{state.plazas_coche}</Text>
+            </View>
 					</TouchableOpacity>
 
 				}
 
 				{!(isEnabled) &&
-					<FontAwesome name="car" size={40} color='lightgrey' />
+          <View style={{flexDirection: 'row'}}>
+              <FontAwesome name="car" size={40} color='lightgrey' />
+              <MaterialCommunityIcons name="car-seat" size={18} color="lightgrey" />
+              <Text style={[{color: "lightgrey"},]}>x{state.plazas_coche}</Text>
+            </View>
 				}
 			</View>
 
@@ -80,7 +215,7 @@ const styles = StyleSheet.create({
 	container: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		padding: 24,
+		padding: 12,
 	},
 	socio: {
 		margin: 24,
@@ -102,15 +237,49 @@ const styles = StyleSheet.create({
 		fontSize: 24,
 		textAlign: 'center',
 	},
-	logo: {
-		height: 128,
-		width: 128,
-		margin: 24,
-	},
 	selector: {
 		textAlign: 'center',
 		alignContent: 'center',
 		alignItems: 'center',
 		margin: 20,
-	}
+	},
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
+  modalNumber: {
+    marginBottom: 15,
+    textAlign: "center",
+    backgroundColor: "grey",
+    color: "white"
+  },
+  map: {
+    width: 300,
+    height: 400,
+  },
+  mapthumb: {
+    width: 300,
+    height: 150,
+  },
 });
