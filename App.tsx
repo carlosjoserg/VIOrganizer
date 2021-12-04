@@ -29,17 +29,16 @@ import Perfil from './screens/Perfil';
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-	return (
-		<NavigationContainer>
-			<Tab.Navigator
-				initialRouteName="Shelters"
-				barStyle={{ paddingBottom: 0 }}
-				screenOptions={({ route }) => ({
-					headerStyle: {
-						height: 0,
-					},
-					tabBarIcon: ({ focused, color, size }) => {
-						let iconName;
+  return (
+    <NavigationContainer>
+      <Tab.Navigator  initialRouteName="Profile"
+          barStyle={{ paddingBottom: 0 }}
+          screenOptions={({ route }) => ({
+            headerStyle: {
+              height: 0,
+            },
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
 
               if (route.name === 'News') {
                 iconName = focused
