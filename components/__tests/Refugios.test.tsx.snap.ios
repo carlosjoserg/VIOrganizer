@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`show story on screen 1`] = `
+exports[`Show refugios on screen 1`] = `
 <ScrollView
   stickyHeaderIndices={
     Array [

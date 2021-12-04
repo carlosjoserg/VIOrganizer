@@ -3,7 +3,7 @@ import { render, fireEvent } from "@testing-library/react-native";
 
 import Refugios from "../Refugios";
 
-test("show story on screen", () => {
+test("Show refugios on screen", () => {
   const navigation = {
     navigate: jest.fn(),
     setOptions: jest.fn(),
