@@ -7,7 +7,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll --collectCoverage",
-    "ci": "jest"
+    "citest": "jest"
   },
   "dependencies": {
     "expo": "~43.0.2",
