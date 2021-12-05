@@ -178,5 +178,26 @@ exports[`Show refugios on screen 1`] = `
       windowSize={21}
     />
   </View>
+  <View
+    style={
+      Object {
+        "alignSelf": "center",
+        "paddingBottom": 30,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "alignSelf": "center",
+          "color": "gray",
+        }
+      }
+    >
+      en
+       
+       
+    </Text>
+  </View>
 </ScrollView>
 `;

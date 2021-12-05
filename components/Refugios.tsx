@@ -113,65 +113,64 @@ export default function Refugios() {
           numColumns={2}
         />
 
-				<Text style={[{ margin: 30 }, styles.paragraph]}>Colaboraciones puntuales</Text>
-				<FlatList
-					data={REFUGIOS_PUNTUAL_DATA}
-					renderItem={renderItem}
-					keyExtractor={(item) => item.id}
-					horizontal={false}
-					numColumns={3}
-				/>
-			</View>
+        <Text style={[{ margin: 30 }, styles.paragraph]}>Colaboraciones puntuales</Text>
+        <FlatList
+          data={REFUGIOS_PUNTUAL_DATA}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          horizontal={false}
+          numColumns={3}
+        />
+      </View>
 
-			<View style={styles.userDiagnostics}>
-				<Text style={styles.userDiagnosticsText}>
-					{I18n.locale} {Constants.manifest.version} {Constants.manifest.revisionId}
-				</Text>
-			</View>
-		</ScrollView>
-	);
+      <View style={styles.userDiagnostics}>
+        <Text style={styles.userDiagnosticsText}>
+          {I18n.locale} {Constants.manifest.version} {Constants.manifest.revisionId}
+        </Text>
+      </View>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		alignItems: "center",
-		justifyContent: "center",
-		marginTop: 24,
-		padding: 10,
-	},
-	paragraph: {
-		marginBottom: 30,
-		fontSize: 20,
-		textAlign: "center",
-		width: "100%",
-		backgroundColor: "white",
-	},
-	scrollView: {},
-	logos: {
-		height: 75,
-		width: 75,
-		alignItems: "center",
-		justifyContent: "center",
-		margin: 10,
-	},
-	userDiagnostics: {
-		alignSelf: "center",
-		paddingBottom: 30,
-	},
-	userDiagnosticsText: {
-		alignSelf: "center",
-		color: "gray",
-	},
-	logo: {
-		height: 128,
-		width: 128,
-		alignItems: "center",
-		justifyContent: "center",
-		margin: 24,
-	},
-	refugio: {
-		fontSize: 16,
-		textAlign: "center",
-	},
-
+  container: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 24,
+    padding: 10,
+  },
+  paragraph: {
+    marginBottom: 30,
+    fontSize: 20,
+    textAlign: "center",
+    width: "100%",
+    backgroundColor: "white",
+  },
+  scrollView: {},
+  logos: {
+    height: 75,
+    width: 75,
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 10,
+  },
+  userDiagnostics: {
+    alignSelf: "center",
+    paddingBottom: 30,
+  },
+  userDiagnosticsText: {
+    alignSelf: "center",
+    color: "gray",
+  },
+  logo: {
+    height: 128,
+    width: 128,
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 24,
+  },
+  refugio: {
+    fontSize: 16,
+    textAlign: "center",
+  },
 });
