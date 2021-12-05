@@ -1,0 +1,203 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Show refugios on screen 1`] = `
+<ScrollView
+  stickyHeaderIndices={
+    Array [
+      0,
+    ]
+  }
+  style={Object {}}
+>
+  <View
+    style={
+      Array [
+        Object {
+          "backgroundColor": "white",
+        },
+        Object {
+          "alignItems": "center",
+        },
+      ]
+    }
+  >
+    <Image
+      source={1}
+      style={
+        Object {
+          "alignItems": "center",
+          "height": 128,
+          "justifyContent": "center",
+          "margin": 24,
+          "width": 128,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "justifyContent": "center",
+        "marginTop": 24,
+        "padding": 10,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "backgroundColor": "white",
+          "fontSize": 20,
+          "marginBottom": 30,
+          "textAlign": "center",
+          "width": "100%",
+        }
+      }
+    >
+      Protectoras y entidades con actuaciones regulares
+    </Text>
+    <FlatList
+      data={
+        Array [
+          Object {
+            "id": "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba1",
+            "nombre": "Animals 
+ sense sostre",
+            "refugio": "ASS",
+            "ubicacion": "21-May-2021",
+          },
+          Object {
+            "id": "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba2",
+            "nombre": "Projecte 
+ Emphatia",
+            "refugio": "PE",
+            "ubicacion": "21-May-2021",
+          },
+        ]
+      }
+      disableVirtualization={false}
+      horizontal={false}
+      initialNumToRender={10}
+      keyExtractor={[Function]}
+      maxToRenderPerBatch={10}
+      numColumns={2}
+      onEndReachedThreshold={2}
+      removeClippedSubviews={false}
+      renderItem={[Function]}
+      scrollEventThrottle={50}
+      updateCellsBatchingPeriod={50}
+      windowSize={21}
+    />
+    <Text
+      style={
+        Array [
+          Object {
+            "margin": 30,
+          },
+          Object {
+            "backgroundColor": "white",
+            "fontSize": 20,
+            "marginBottom": 30,
+            "textAlign": "center",
+            "width": "100%",
+          },
+        ]
+      }
+    >
+      Colaboraciones puntuales
+    </Text>
+    <FlatList
+      data={
+        Array [
+          Object {
+            "id": "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba3",
+            "nombre": "Odena",
+            "refugio": "O",
+            "ubicacion": "21-May-2021",
+          },
+          Object {
+            "id": "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba4",
+            "nombre": "Life4Pitbulls",
+            "refugio": "L4P",
+            "ubicacion": "21-May-2021",
+          },
+          Object {
+            "id": "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba5",
+            "nombre": "Arda",
+            "refugio": "A",
+            "ubicacion": "21-May-2021",
+          },
+          Object {
+            "id": "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba6",
+            "nombre": "Rodamons 24h",
+            "refugio": "R24h",
+            "ubicacion": "21-May-2021",
+          },
+          Object {
+            "id": "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba7",
+            "nombre": "Segundas 
+ Oportunidades",
+            "refugio": "SO",
+            "ubicacion": "21-May-2021",
+          },
+          Object {
+            "id": "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba8",
+            "nombre": "Fundación 
+ Hope&Help",
+            "refugio": "FHH",
+            "ubicacion": "21-May-2021",
+          },
+          Object {
+            "id": "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba9",
+            "nombre": "Protectora 
+ d\`Animals  
+ de Tàrrega",
+            "refugio": "PAT",
+            "ubicacion": "21-May-2021",
+          },
+          Object {
+            "id": "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba0",
+            "nombre": "Segarra-Cervera refugi",
+            "refugio": "SCR",
+            "ubicacion": "21-May-2021",
+          },
+        ]
+      }
+      disableVirtualization={false}
+      horizontal={false}
+      initialNumToRender={10}
+      keyExtractor={[Function]}
+      maxToRenderPerBatch={10}
+      numColumns={3}
+      onEndReachedThreshold={2}
+      removeClippedSubviews={false}
+      renderItem={[Function]}
+      scrollEventThrottle={50}
+      updateCellsBatchingPeriod={50}
+      windowSize={21}
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "alignSelf": "center",
+        "paddingBottom": 30,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "alignSelf": "center",
+          "color": "gray",
+        }
+      }
+    >
+      en
+       
+       
+    </Text>
+  </View>
+</ScrollView>
+`;
