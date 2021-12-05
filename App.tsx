@@ -44,33 +44,33 @@ export default function App() {
 
 						if (route.name === "News") {
 							iconName = focused ? "ios-information-circle" : "ios-information-circle-outline";
-							return <Ionicons name={iconName} size={36} color={color} />;
+							return <Ionicons name={iconName} size={24} color={color} />;
 						} else if (route.name === "Trips") {
 							iconName = focused ? "guide-dog" : "guide-dog";
-							return <Foundation name={iconName} size={36} color={color} />;
+							return <Foundation name={iconName} size={24} color={color} />;
 						} else if (route.name === "Shelters") {
 							iconName = focused ? "shield-home" : "shield-home-outline";
-							return <MaterialCommunityIcons name={iconName} size={36} color={color} />;
+							return <MaterialCommunityIcons name={iconName} size={24} color={color} />;
 						} else if (route.name === "Profile") {
 							iconName = focused ? "id-card" : "id-card-o";
-							return <FontAwesome name={iconName} size={36} color={color} />;
+							return <FontAwesome name={iconName} size={24} color={color} />;
 						}
 					},
 					tabBarActiveTintColor: "tomato",
 					tabBarInactiveTintColor: "gray",
 				})}>
-				<Tab.Screen
-					name="News"
-					component={News}
-					options={{ title: "", tabBarLabel: I18n.t("noticias"), tabBarBadge: 1 }}
-				/>
+				<Tab.Screen name="Profile" component={Perfil} options={{ title: "", tabBarLabel: I18n.t("perfil") }} />
 				<Tab.Screen name="Trips" component={Salidas} options={{ title: "", tabBarLabel: I18n.t("salidas") }} />
 				<Tab.Screen
 					name="Shelters"
 					component={Refugios}
 					options={{ title: "", tabBarLabel: I18n.t("refugios") }}
 				/>
-				<Tab.Screen name="Profile" component={Perfil} options={{ title: "", tabBarLabel: I18n.t("perfil") }} />
+				<Tab.Screen
+					name="News"
+					component={News}
+					options={{ title: "", tabBarLabel: I18n.t("noticias"), tabBarBadge: 1 }}
+				/>
 			</Tab.Navigator>
 		</NavigationContainer>
 	);
