@@ -17,14 +17,13 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 import firebase from "../lib/firebase";
 
 export default function Perfil() {
 
 	{/** definir collección de roles y de usuarios, y las pantallas tendrán diferentes opciones de acuerdo a los roles */}
-	{/** definir collección de roles y de usuarios, y las pantallas tendrán diferentes opciones de acuerdo a los roles */}
+	{/** Dummy struct to initialize the app, but useEffect overwrites these values as soon as it executes the snapshot */}
 	var initalState = {
 		movil: '606909265',
 		nombre: 'John Doe',
@@ -34,8 +33,18 @@ export default function Perfil() {
 		tengo_coche: true,
 		plazas_coche: 4
 	};
+
 	const [state, setState] = useState(initalState);
 
+	{/** Firebase auth se encargará de verificar éste número, y a partir de allí, la app quedará registrada con ése número */}
+	const current_mobile_phone = '606909265';
+	const getUserById = async () => {
+		const dbRef = firebase.db.collection("users").doc(current_mobile_phone);
+		const doc = await dbRef.get();
+		setState(doc.data());
+	};
+
+	{/** Only available to those with junta role */}
 	const createUser = async () => {
 		try {
 			await firebase.db.collection("users").add(state);
@@ -57,11 +66,15 @@ export default function Perfil() {
 		await userRef.set(state);
 	};
 
-	const getUserById = async () => {
-		const dbRef = firebase.db.collection("users").doc(state.movil);
-		const doc = await dbRef.get();
-		const user = doc.data();
-	};
+	useEffect(() => {
+			firebase.db.collection("users").onSnapshot((querySnapshot) => {
+			const users = [];
+			querySnapshot.docs.forEach((doc) => {
+				if(  doc.data().movil === current_mobile_phone )
+					setState(doc.data());
+			});
+		});
+	}, []);
 
 	return (
 		<View style={[{marginTop: insets.top}, {flexDirection: 'column'}, styles.container]}>
@@ -104,7 +117,7 @@ export default function Perfil() {
 			animationType="fade"
 			transparent={true}
 			visible={casaVisible}
-			onBackdropPress={() => {setCasaVisible(false); }} >
+			onBackdropPress={() => {setCasaVisible(false); updateInfo();} } >
 				<View style={styles.centeredView}>
 					<View style={styles.modalView}>
 						<Text style={styles.modalText}>{"Haz click en tu ubicación habitual:"}</Text>
@@ -140,7 +153,6 @@ export default function Perfil() {
 														longitudeDelta: e.longitudeDelta
 													}
 												});
-												updateInfo();
 											}
 										}
 							/>
@@ -151,7 +163,9 @@ export default function Perfil() {
 			</Modal>
 		</View>
 
-		<Avatar source={require('../assets/snack-icon.png')} rounded size="xlarge" />
+		<TouchableOpacity onPress={() => {Alert.alert("Changing profile pic not implemented yet")}}>
+			<Avatar source={require('../assets/snack-icon.png')} rounded size="xlarge" />
+		</TouchableOpacity>
 		<Text style={styles.nombre}>{state.nombre}</Text>
 
 		<Text style={styles.socio}>Socio #{state.nro_socio}</Text>
