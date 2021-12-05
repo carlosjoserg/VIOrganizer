@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Text, View, StyleSheet, Image, ScrollView, FlatList, TouchableOpacity, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Constants from "expo-constants";
+import I18n from "../i18n";
 
 type Refugios = {
 	id: string;
@@ -121,6 +123,12 @@ export default function Refugios() {
 					numColumns={3}
 				/>
 			</View>
+
+			<View style={styles.userDiagnostics}>
+				<Text style={styles.userDiagnosticsText}>
+					{I18n.locale} {Constants.manifest.version} {Constants.manifest.revisionId}
+				</Text>
+			</View>
 		</ScrollView>
 	);
 }
@@ -146,6 +154,14 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		margin: 10,
+	},
+	userDiagnostics: {
+		alignSelf: "center",
+		paddingBottom: 30,
+	},
+	userDiagnosticsText: {
+		alignSelf: "center",
+		color: "gray",
 	},
 	logo: {
 		height: 128,

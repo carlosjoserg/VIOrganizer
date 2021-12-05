@@ -236,6 +236,7 @@ export default function Salidas() {
 				<FlatList data={SALIDAS_APUNTADAS_DATA} renderItem={renderItem} keyExtractor={(item) => item.id} />
 			)}
 			{!isEnabled && <FlatList data={SALIDAS_DATA} renderItem={renderItem} keyExtractor={(item) => item.id} />}
+
 		</View>
 	);
 }
