@@ -173,11 +173,11 @@ var Salida = ({ salida }: SalidasDato) => (
 					<Button mode="outlined" onPress={() => Alert.alert('Apuntado!')} ><Text style={[{color: "grey"}]}>ME APUNTO</Text></Button>
 				)}
 				{salida.apuntado && !salida.confirmado && (
-					<Button mode="outlined" onPress={() => Alert.alert('Desapuntado!')} ><Text style={[{color: "orange"}]}>DESAPÚNTAME</Text></Button>
+					<Button mode="contained" style={[{backgroundColor: 'tomato'}]} onPress={() => Alert.alert('Desapuntado!')} ><Text style={[{color: "white"}]}>APUNTADO</Text></Button>
 				)}
 
 				{salida.apuntado && salida.confirmado && (
-					<Text style={[{color: "green" }]}>CONFIRMADO!</Text>
+					<Button mode="contained" style={[{backgroundColor: 'green'}]} onPress={() => Alert.alert('Go to Chat')} ><Text style={[{color: "white"}]}>CONFIRMADO</Text></Button>
 				)}
 
 				{/** COULD NOT FIND A WAY TO ALIGN THIS PART TO THE RIGHT, paddingRight: 40 is hardcoded */}
