@@ -1,14 +1,14 @@
 import * as React from "react";
 import { useState } from "react";
-import { Button, Text, View, StyleSheet, FlatList, Image, Alert, TouchableOpacity, Switch } from "react-native";
+import { Text, View, StyleSheet, FlatList, Image, Alert, TouchableOpacity, Switch } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { Avatar, Button, Card, Title, Paragraph, List } from 'react-native-paper';
 
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-
-import { Card } from "react-native-paper";
 
 interface SalidasDato {
 	id: string;
@@ -31,7 +31,7 @@ const SALIDAS_DATA : SalidasDato[]= [
 		id: "bd7acbea-c1b1-46c2-aed5-3ad53ab111a",
 		title: "Salida #1",
 		refugio: "ASS",
-		fecha: "21-May-2021",
+		fecha: "8-May-2021",
 		hora: "14:00",
 		referente: "Marta",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
@@ -61,7 +61,7 @@ const SALIDAS_DATA : SalidasDato[]= [
 		id: "bd7acbea-c1b1-46c2-aed5-3ad5333328ba",
 		title: "Salida #3",
 		refugio: "O",
-		fecha: "21-May-2021",
+		fecha: "25-May-2021",
 		hora: "14:00",
 		referente: "Jaime",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
@@ -76,7 +76,7 @@ const SALIDAS_DATA : SalidasDato[]= [
 		id: "bd7acbea-c1b1-46c2-aed5-3ad5344428ba",
 		title: "Salida #4",
 		refugio: "ASS",
-		fecha: "21-May-2021",
+		fecha: "3-Jun-2021",
 		hora: "14:00",
 		referente: "Marta",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
@@ -91,7 +91,7 @@ const SALIDAS_DATA : SalidasDato[]= [
 		id: "bd7acbea-c1b1-46c2-aed5-3ad53a5558ba",
 		title: "Salida #5",
 		refugio: "ASS",
-		fecha: "21-May-2021",
+		fecha: "7-Jul-2021",
 		hora: "14:00",
 		referente: "Marta",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
@@ -109,7 +109,7 @@ const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 		id: "bd7acbea-c1b1-46c2-aed5-3ad5666b28ba",
 		title: "Salida #1",
 		refugio: "ASS",
-		fecha: "21-May-2021",
+		fecha: "8-May-2021",
 		hora: "14:00",
 		referente: "Marta",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
@@ -124,7 +124,7 @@ const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 		id: "bd7acbea-c1b1-46c2-aed5-3ad5377728ba",
 		title: "Salida #3",
 		refugio: "O",
-		fecha: "21-May-2021",
+		fecha: "25-May-2021",
 		hora: "14:00",
 		referente: "Jaime",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
@@ -139,7 +139,7 @@ const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 		id: "bd7acbea-c1b1-46c2-aed5-3ad53a8888ba",
 		title: "Salida #5",
 		refugio: "ASS",
-		fecha: "21-May-2021",
+		fecha: "7-Jul-2021",
 		hora: "14:00",
 		referente: "Marta",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
@@ -152,61 +152,51 @@ const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 	},
 ];
 
-const Salida = ({ salida }: SalidasDato) => (
-	<Card style={styles.cards}>
-		{/** El usuario puede apuntarse a varias, y se le confirma automáticamente de acuerdo a las necesidades 3 días antes, o manualmente por el referente */}
-		{!salida.apuntado && !salida.confirmado && (
-			<MaterialCommunityIcons style={styles.state} name="lock-open" size={36} color="lightgrey" />
-		)}
-		{salida.apuntado && !salida.confirmado && (
-			<MaterialCommunityIcons style={styles.state} name="lock-open-check" size={36} color="orange" />
-		)}
+const LeftContent = props => <Avatar.Image {...props} size={42} source={require('../assets/snack-icon.png')} />
 
-		{salida.apuntado && salida.confirmado && (
-			<MaterialCommunityIcons style={styles.state} name="lock-check" size={36} color="green" />
-		)}
+var Salida = ({ salida }: SalidasDato) => (
+	<Card style={[{marginTop: 5}]}>
+		<Card.Title title={salida.title} subtitle={salida.fecha} left={LeftContent} />
 
-		<TouchableOpacity onPress={() => Alert.alert("Added to " + salida.title)}>
-			<View style={[{ flexDirection: "row" }, { justifyContent: "space-around" }]}>
-				<View
-					style={[
-						{ flexDirection: "column" },
-						{ justifyContent: "space-evenly" },
-						{ alignContent: "center" },
-					]}>
-					<Image style={styles.logo} source={require("../assets/snack-icon.png")} />
-					<Text style={styles.refugio}>{salida.refugio}</Text>
-				</View>
+		<Card.Content>
+			<Paragraph style={[{textAlign: 'right'}, {color: 'grey'}]}>
+				{salida.refugio} con {salida.referente}
+			</Paragraph>
+			<Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
+		</Card.Content>
 
-				<View style={[{ flexDirection: "column" }]}>
-					<Text style={styles.salidas}>{salida.title}</Text>
-					<Text style={styles.tareas}>
-						{salida.fecha} @ {salida.hora}
-					</Text>
-					<View style={[{ flexDirection: "row-reverse" }]}>
-						<FontAwesome style={styles.tareas} name="id-badge" size={24} color="black" />
-						<Text style={styles.tareas}>{salida.referente}</Text>
+		<Card.Actions>
+
+			<View style={[{ flexDirection: "row" }, {justifyContent: "space-between"}, {alignContent: "stretch"}, {alignItems:'center'}]}>
+
+				{!salida.apuntado && !salida.confirmado && (
+					<Button mode="outlined" onPress={() => Alert.alert('Apuntado!')} ><Text style={[{color: "grey"}]}>ME APUNTO</Text></Button>
+				)}
+				{salida.apuntado && !salida.confirmado && (
+					<Button mode="outlined" onPress={() => Alert.alert('Desapuntado!')} ><Text style={[{color: "orange"}]}>DESAPÚNTAME</Text></Button>
+				)}
+
+				{salida.apuntado && salida.confirmado && (
+					<Text style={[{color: "green" }]}>CONFIRMADO!</Text>
+				)}
+
+				{/** COULD NOT FIND A WAY TO ALIGN THIS PART TO THE RIGHT, paddingRight: 40 is hardcoded */}
+				<View style={[{ flexDirection: "row-reverse" }, {paddingRight: 40}, {alignItems:'center'}]}>
+					<View style={[{ flexDirection: "row" }, {alignItems: 'center'}]}>
+						<Text style={styles.tareas}>{salida.coches_inscritos}</Text>
+						<FontAwesome5 style={styles.tareas} name="car-side" size={18} color="grey" />
 					</View>
-
-					<View style={[{ flexDirection: "row-reverse" }]}>
-						<View style={[{ flexDirection: "row" }]}>
-							<Text style={styles.tareas}>{salida.coches_inscritos}</Text>
-							<FontAwesome5 style={styles.tareas} name="car-side" size={24} color="black" />
-						</View>
-						<View style={[{ flexDirection: "row" }]}>
-							<Text style={styles.tareas}>{salida.asientos_libres}</Text>
-							<MaterialCommunityIcons style={styles.tareas} name="car-seat" size={24} color="black" />
-						</View>
-						<View style={[{ flexDirection: "row" }]}>
-							<Text style={styles.tareas}>
-								{salida.personas_inscritas}/{salida.personas_necesarias}
-							</Text>
-							<Ionicons style={styles.tareas} name="people" size={24} color="black" />
-						</View>
+					<View style={[{ flexDirection: "row" }, {alignItems: 'center'}]}>
+						<Text style={styles.tareas}>{salida.asientos_libres}</Text>
+						<MaterialCommunityIcons style={styles.tareas} name="car-seat" size={18} color="grey" />
+					</View>
+					<View style={[{ flexDirection: "row" }, {alignItems: 'center'}]}>
+						<Text style={styles.tareas}>{salida.personas_inscritas}/{salida.personas_necesarias} </Text>
+						<Ionicons style={styles.tareas} name="people" size={18} color="grey" />
 					</View>
 				</View>
 			</View>
-		</TouchableOpacity>
+		</Card.Actions>
 	</Card>
 );
 
@@ -254,36 +244,12 @@ const styles = StyleSheet.create({
 		textAlign: "right",
 		marginRight: 50,
 	},
-	cards: {
-		margin: 15,
-		fontSize: 14,
-		fontWeight: "bold",
-		textAlign: "center",
-		justifyContent: "center",
-	},
-	logo: {
-		height: 50,
-		width: 50,
-		alignContent: "center",
-	},
-	salidas: {
-		fontSize: 28,
-		margin: 2,
-		textAlign: "right",
-		alignItems: "center",
-	},
-	refugio: {
-		fontSize: 24,
-	},
 	tareas: {
-		fontSize: 16,
+		fontSize: 14,
 		margin: 5,
 		alignItems: "center",
 		alignContent: "center",
-	},
-	state: {
-		textAlign: "center",
-		margin: 10,
+		color: "grey"
 	},
 	vilogo: {
 		height: 50,
@@ -291,7 +257,7 @@ const styles = StyleSheet.create({
 		marginLeft: 40,
 		marginTop: 20,
 		marginBottom: 10,
-		textAlign: "center",
+		textAlign: "left",
 		alignContent: "center",
 		alignItems: "center",
 	},
