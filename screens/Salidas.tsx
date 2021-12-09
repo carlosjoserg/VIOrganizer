@@ -152,48 +152,42 @@ const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 	},
 ];
 
-const LeftContent = props => <Avatar.Image {...props} size={42} source={require('../assets/snack-icon.png')} />
+const ShelterPic = props => <Avatar.Image {...props} size={42} source={require('../assets/snack-icon.png')} />
+const ProfilePicReferente = props => <Avatar.Image {...props} style={[{margin: 20}]} size={42} source={require('../assets/snack-icon.png')} />
 
 var Salida = ({ salida }: SalidasDato) => (
-	<Card style={[{marginTop: 5}]}>
-		<Card.Title title={salida.title} subtitle={salida.fecha} left={LeftContent} />
+	<Card style={[{marginTop: 10}]}>
+		<Card.Title title={salida.title} subtitle={salida.fecha} left={ShelterPic} right={ProfilePicReferente} />
 
 		<Card.Content>
-			<Paragraph style={[{textAlign: 'right'}, {color: 'grey'}]}>
-				{salida.refugio} con {salida.referente}
-			</Paragraph>
 			<Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
 		</Card.Content>
 
-		<Card.Actions>
+		<Card.Actions style={[{justifyContent: "space-around"},]}>
 
-			<View style={[{ flexDirection: "row" }, {justifyContent: "space-between"}, {alignContent: "stretch"}, {alignItems:'center'}]}>
+			{!salida.apuntado && !salida.confirmado && (
+				<Button mode="outlined" onPress={() => Alert.alert('Apuntado!')} ><Text style={[{color: "grey"}]}>ME APUNTO</Text></Button>
+			)}
+			{salida.apuntado && !salida.confirmado && (
+				<Button mode="contained" style={[{backgroundColor: 'tomato'}]} onPress={() => Alert.alert('Desapuntado!')} ><Text style={[{color: "white"}]}>APUNTADO</Text></Button>
+			)}
 
-				{!salida.apuntado && !salida.confirmado && (
-					<Button mode="outlined" onPress={() => Alert.alert('Apuntado!')} ><Text style={[{color: "grey"}]}>ME APUNTO</Text></Button>
-				)}
-				{salida.apuntado && !salida.confirmado && (
-					<Button mode="contained" style={[{backgroundColor: 'tomato'}]} onPress={() => Alert.alert('Desapuntado!')} ><Text style={[{color: "white"}]}>APUNTADO</Text></Button>
-				)}
+			{salida.apuntado && salida.confirmado && (
+				<Button mode="contained" style={[{backgroundColor: 'green'}]} onPress={() => Alert.alert('Go to Chat')} ><Text style={[{color: "white"}]}>CONFIRMADO</Text></Button>
+			)}
 
-				{salida.apuntado && salida.confirmado && (
-					<Button mode="contained" style={[{backgroundColor: 'green'}]} onPress={() => Alert.alert('Go to Chat')} ><Text style={[{color: "white"}]}>CONFIRMADO</Text></Button>
-				)}
-
-				{/** COULD NOT FIND A WAY TO ALIGN THIS PART TO THE RIGHT, paddingRight: 40 is hardcoded */}
-				<View style={[{ flexDirection: "row-reverse" }, {paddingRight: 40}, {alignItems:'center'}]}>
-					<View style={[{ flexDirection: "row" }, {alignItems: 'center'}]}>
-						<Text style={styles.tareas}>{salida.coches_inscritos}</Text>
-						<FontAwesome5 style={styles.tareas} name="car-side" size={18} color="grey" />
-					</View>
-					<View style={[{ flexDirection: "row" }, {alignItems: 'center'}]}>
-						<Text style={styles.tareas}>{salida.asientos_libres}</Text>
-						<MaterialCommunityIcons style={styles.tareas} name="car-seat" size={18} color="grey" />
-					</View>
-					<View style={[{ flexDirection: "row" }, {alignItems: 'center'}]}>
-						<Text style={styles.tareas}>{salida.personas_inscritas}/{salida.personas_necesarias} </Text>
-						<Ionicons style={styles.tareas} name="people" size={18} color="grey" />
-					</View>
+			<View style={[{ flexDirection: "row-reverse" }, {alignItems:'center'}]}>
+				<View style={[{ flexDirection: "row" }, {alignItems: 'center'}, {margin: 5}]}>
+					<Text style={styles.tareas}>{salida.coches_inscritos}</Text>
+					<FontAwesome5 style={styles.tareas} name="car-side" size={18} color="grey" />
+				</View>
+				<View style={[{ flexDirection: "row" }, {alignItems: 'center'}, {margin: 5}]}>
+					<Text style={styles.tareas}>{salida.asientos_libres}</Text>
+					<MaterialCommunityIcons style={styles.tareas} name="car-seat" size={18} color="grey" />
+				</View>
+				<View style={[{ flexDirection: "row" }, {alignItems: 'center'}, {margin: 5}]}>
+					<Text style={styles.tareas}>{salida.personas_inscritas}/{salida.personas_necesarias} </Text>
+					<Ionicons style={styles.tareas} name="people" size={18} color="grey" />
 				</View>
 			</View>
 		</Card.Actions>
@@ -222,10 +216,12 @@ export default function Salidas() {
 				</View>
 			</View>
 
-			{isEnabled && (
+			{isEnabled &&
 				<FlatList data={SALIDAS_APUNTADAS_DATA} renderItem={renderItem} keyExtractor={(item) => item.id} />
-			)}
-			{!isEnabled && <FlatList data={SALIDAS_DATA} renderItem={renderItem} keyExtractor={(item) => item.id} />}
+			}
+			{!isEnabled &&
+				<FlatList data={SALIDAS_DATA} renderItem={renderItem} keyExtractor={(item) => item.id} />
+			}
 
 		</View>
 	);
@@ -246,7 +242,7 @@ const styles = StyleSheet.create({
 	},
 	tareas: {
 		fontSize: 14,
-		margin: 5,
+		margin: 3,
 		alignItems: "center",
 		alignContent: "center",
 		color: "grey"
