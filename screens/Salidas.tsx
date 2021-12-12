@@ -10,7 +10,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-interface SalidasDato {
+const current_mobile_phone = '606909265';
+
+type SalidasDato = {
 	id: string;
 	title: string;
 	refugio: string;
@@ -18,12 +20,11 @@ interface SalidasDato {
 	hora: string;
 	referente: string;
 	tareas: string[];
-	personas_necesarias: string;
-	personas_inscritas: string;
-	coches_inscritos: string;
-	asientos_libres: string;
-	apuntado: boolean;
-	confirmado: boolean;
+	personas_necesarias: number;
+	personas_inscritas: string[];
+	coches_inscritos: number;
+	asientos_libres: number;
+	confirmada: boolean
 }
 
 const SALIDAS_DATA : SalidasDato[]= [
@@ -35,12 +36,11 @@ const SALIDAS_DATA : SalidasDato[]= [
 		hora: "14:00",
 		referente: "Marta",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: "10",
-		personas_inscritas: "3",
-		coches_inscritos: "2",
-		asientos_libres: "5",
-		apuntado: true,
-		confirmado: false,
+		personas_necesarias: 20,
+		personas_inscritas: ["606909265"],
+		coches_inscritos: 2,
+		asientos_libres: 5,
+		confirmada: false
 	},
 	{
 		id: "bd7acbea-c1b1-46c2-aed5-3ad53a2228ba",
@@ -50,12 +50,11 @@ const SALIDAS_DATA : SalidasDato[]= [
 		hora: "14:00",
 		referente: "Jordi",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: "5",
-		personas_inscritas: "3",
-		coches_inscritos: "0",
-		asientos_libres: "0",
-		apuntado: false,
-		confirmado: false,
+		personas_necesarias: 5,
+		personas_inscritas: [],
+		coches_inscritos: 0,
+		asientos_libres: 0,
+		confirmada: false
 	},
 	{
 		id: "bd7acbea-c1b1-46c2-aed5-3ad5333328ba",
@@ -65,12 +64,11 @@ const SALIDAS_DATA : SalidasDato[]= [
 		hora: "14:00",
 		referente: "Jaime",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: "20",
-		personas_inscritas: "3",
-		coches_inscritos: "3",
-		asientos_libres: "9",
-		apuntado: true,
-		confirmado: false,
+		personas_necesarias: 20,
+		personas_inscritas: [],
+		coches_inscritos: 3,
+		asientos_libres: 9,
+		confirmada: false
 	},
 	{
 		id: "bd7acbea-c1b1-46c2-aed5-3ad5344428ba",
@@ -80,12 +78,11 @@ const SALIDAS_DATA : SalidasDato[]= [
 		hora: "14:00",
 		referente: "Marta",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: "2",
-		personas_inscritas: "2",
-		coches_inscritos: "1",
-		asientos_libres: "0",
-		apuntado: false,
-		confirmado: false,
+		personas_necesarias: 2,
+		personas_inscritas: [],
+		coches_inscritos: 1,
+		asientos_libres: 0,
+		confirmada: false
 	},
 	{
 		id: "bd7acbea-c1b1-46c2-aed5-3ad53a5558ba",
@@ -95,14 +92,24 @@ const SALIDAS_DATA : SalidasDato[]= [
 		hora: "14:00",
 		referente: "Marta",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: "10",
-		personas_inscritas: "3",
-		coches_inscritos: "2",
-		asientos_libres: "5",
-		apuntado: true,
-		confirmado: false,
+		personas_necesarias: 10,
+		personas_inscritas: [],
+		coches_inscritos: 2,
+		asientos_libres: 5,
+		confirmada: false
 	},
 ];
+
+function isApuntado (personas: string[]) {
+						var apuntado = false;
+						personas.forEach((person) => {
+							if(person === current_mobile_phone){
+								apuntado = true;
+							}
+					}
+	);
+	return apuntado;
+}
 
 const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 	{
@@ -113,12 +120,11 @@ const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 		hora: "14:00",
 		referente: "Marta",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: "10",
-		personas_inscritas: "3",
-		coches_inscritos: "2",
-		asientos_libres: "5",
-		apuntado: true,
-		confirmado: false,
+		personas_necesarias: 10,
+		personas_inscritas: [],
+		coches_inscritos: 2,
+		asientos_libres: 5,
+		confirmada: false
 	},
 	{
 		id: "bd7acbea-c1b1-46c2-aed5-3ad5377728ba",
@@ -128,12 +134,11 @@ const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 		hora: "14:00",
 		referente: "Jaime",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: "20",
-		personas_inscritas: "3",
-		coches_inscritos: "3",
-		asientos_libres: "9",
-		apuntado: true,
-		confirmado: false,
+		personas_necesarias: 20,
+		personas_inscritas: [],
+		coches_inscritos: 3,
+		asientos_libres: 9,
+		confirmada: false
 	},
 	{
 		id: "bd7acbea-c1b1-46c2-aed5-3ad53a8888ba",
@@ -143,12 +148,11 @@ const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 		hora: "14:00",
 		referente: "Marta",
 		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: "10",
-		personas_inscritas: "3",
-		coches_inscritos: "2",
-		asientos_libres: "5",
-		apuntado: true,
-		confirmado: false,
+		personas_necesarias: 10,
+		personas_inscritas: [],
+		coches_inscritos: 2,
+		asientos_libres: 5,
+		confirmada: false
 	},
 ];
 
@@ -156,7 +160,7 @@ const ShelterPic = props => <Avatar.Image {...props} size={42} source={require('
 const ProfilePicReferente = props => <Avatar.Image {...props} style={[{margin: 20}]} size={42} source={require('../assets/snack-icon.png')} />
 
 var Salida = ({ salida }: SalidasDato) => (
-	<Card style={[{marginTop: 10}]}>
+	<Card style={[{marginTop: 10}, {marginBottom: 10}]}>
 		<Card.Title title={salida.title} subtitle={salida.fecha} left={ShelterPic} right={ProfilePicReferente} />
 
 		<Card.Content>
@@ -165,14 +169,14 @@ var Salida = ({ salida }: SalidasDato) => (
 
 		<Card.Actions style={[{justifyContent: "space-around"},]}>
 
-			{!salida.apuntado && !salida.confirmado && (
+			{!( isApuntado(salida.personas_inscritas) ) && !(salida.confirmada) &&
 				<Button mode="outlined" onPress={() => Alert.alert('Apuntado!')} ><Text style={[{color: "grey"}]}>ME APUNTO</Text></Button>
-			)}
-			{salida.apuntado && !salida.confirmado && (
+			}
+			{ isApuntado(salida.personas_inscritas) && !(salida.confirmada) && (
 				<Button mode="contained" style={[{backgroundColor: 'tomato'}]} onPress={() => Alert.alert('Desapuntado!')} ><Text style={[{color: "white"}]}>APUNTADO</Text></Button>
 			)}
 
-			{salida.apuntado && salida.confirmado && (
+			{ isApuntado(salida.personas_inscritas) && (salida.confirmada) && (
 				<Button mode="contained" style={[{backgroundColor: 'green'}]} onPress={() => Alert.alert('Go to Chat')} ><Text style={[{color: "white"}]}>CONFIRMADO</Text></Button>
 			)}
 
@@ -186,7 +190,7 @@ var Salida = ({ salida }: SalidasDato) => (
 					<MaterialCommunityIcons style={styles.tareas} name="car-seat" size={18} color="grey" />
 				</View>
 				<View style={[{ flexDirection: "row" }, {alignItems: 'center'}, {margin: 5}]}>
-					<Text style={styles.tareas}>{salida.personas_inscritas}/{salida.personas_necesarias} </Text>
+					<Text style={styles.tareas}>{salida.personas_inscritas.length}/{salida.personas_necesarias} </Text>
 					<Ionicons style={styles.tareas} name="people" size={18} color="grey" />
 				</View>
 			</View>
