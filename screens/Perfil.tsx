@@ -24,17 +24,25 @@ export default function Perfil() {
 
 	{/** definir collección de roles y de usuarios, y las pantallas tendrán diferentes opciones de acuerdo a los roles */}
 	{/** Dummy struct to initialize the app, but useEffect overwrites these values as soon as it executes the snapshot */}
-	var initalState = {
-		movil: '606909265',
-		nombre: 'John Doe',
-		casa: {latitude: 41.4004358, longitude: 2.1665522, latitudeDelta: 0.01, longitudeDelta: 0.01},
-		nro_socio: '84',
-		roles: ['socio',],
-		tengo_coche: true,
-		plazas_coche: 4
+	type userData = {
+		movil: string,
+		nombre: string,
+		casa: {latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number},
+		nro_socio: string,
+		roles: string[],
+		tengo_coche: boolean,
+		plazas_coche: number
 	};
 
-	const [state, setState] = useState(initalState);
+	const [state, setState] = useState({
+      movil: "",
+      nombre: "",
+      casa: {latitude: 0, longitude: 0, latitudeDelta: 0, longitudeDelta: 0},
+      nro_socio: "",
+      roles: [""],
+      tengo_coche: false,
+      plazas_coche: 0
+    });
 
 	{/** Firebase auth se encargará de verificar éste número, y a partir de allí, la app quedará registrada con ése número */}
 	const current_mobile_phone = '606909265';
@@ -53,18 +61,16 @@ export default function Perfil() {
 		}
 	};
 
-	{/** modal/edit controls */}
-	const [plazasVisible, setPlazasVisible] = useState([]);
-	const [casaVisible, setCasaVisible] = useState([]);
-	const [isEnabled, setIsEnabled] = useState(state.tengo_coche);
-	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
-	const insets = useSafeAreaInsets();
-
 	const updateInfo = async () => {
 		const userRef = firebase.db.collection("users").doc(state.movil);
 		await userRef.set(state);
 	};
+
+	{/** modal/edit controls */}
+	const [plazasVisible, setPlazasVisible] = useState([]);
+	const [casaVisible, setCasaVisible] = useState([]);
+
+	const insets = useSafeAreaInsets();
 
 	useEffect(() => {
 			firebase.db.collection("users").onSnapshot((querySnapshot) => {
@@ -120,7 +126,7 @@ export default function Perfil() {
 			onBackdropPress={() => {setCasaVisible(false); updateInfo();} } >
 				<View style={styles.centeredView}>
 					<View style={styles.modalView}>
-						<Text style={styles.modalText}>{"Haz click en tu ubicación habitual:"}</Text>
+						<Text style={styles.modalText}>{"Haz click en tu ubicación preferente:"}</Text>
 						{/** DEBUGING COORDS <Text style={styles.modalText}>{state.casa.latitude}, {state.casa.longitude}, {state.casa.latitudeDelta}, {state.casa.longitudeDelta}</Text> */}
 						<View style={styles.container}>
 							<MapView
@@ -193,15 +199,15 @@ export default function Perfil() {
 		</TouchableOpacity>
 
 		<View style={[{flexDirection: 'row'}, {alignContent: 'center'}, {alignItems: 'center'}]}>
-			<FontAwesome5 name="walking" size={40} color={isEnabled ? 'lightgrey' : 'tomato'} />
+			<FontAwesome5 name="walking" size={40} color={state.tengo_coche ? 'lightgrey' : 'tomato'} />
 			<Switch style={styles.selector}
 				trackColor={{ false: '#767577', true: '#767577' }}
-				thumbColor={isEnabled ? '#f5dd4b' : '#f5dd4b'}
+				thumbColor={state.tengo_coche ? '#f5dd4b' : '#f5dd4b'}
 				ios_backgroundColor="#3e3e3e"
-				onValueChange={toggleSwitch}
-				value={isEnabled} />
+				onValueChange={value => {setState({...state,tengo_coche: value});}}
+				value={state.tengo_coche} />
 
-				{isEnabled &&
+				{state.tengo_coche && updateInfo() &&
 					<TouchableOpacity onPress={() => { setPlazasVisible(true);}}>
 						<View style={{flexDirection: 'row'}}>
 							<FontAwesome name="car" size={40} color='tomato' />
@@ -212,7 +218,7 @@ export default function Perfil() {
 
 				}
 
-				{!(isEnabled) &&
+				{!(state.tengo_coche) && updateInfo() &&
 					<View style={{flexDirection: 'row'}}>
 						<FontAwesome name="car" size={40} color='lightgrey' />
 						<MaterialCommunityIcons name="car-seat" size={18} color="lightgrey" />
