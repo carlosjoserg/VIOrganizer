@@ -44,13 +44,13 @@ export default function App() {
 
 						if (route.name === "News") {
 							iconName = focused ? "ios-information-circle" : "ios-information-circle-outline";
-							return <Ionicons name={iconName} size={24} color={color} />;
+							return <Ionicons name={iconName} size={32} color={color} />;
 						} else if (route.name === "Trips") {
 							iconName = focused ? "guide-dog" : "guide-dog";
-							return <Foundation name={iconName} size={24} color={color} />;
+							return <Foundation name={iconName} size={34} color={color} />;
 						} else if (route.name === "Shelters") {
 							iconName = focused ? "shield-home" : "shield-home-outline";
-							return <MaterialCommunityIcons name={iconName} size={24} color={color} />;
+							return <MaterialCommunityIcons name={iconName} size={30} color={color} />;
 						} else if (route.name === "Profile") {
 							iconName = focused ? "id-card" : "id-card-o";
 							return <FontAwesome name={iconName} size={24} color={color} />;
