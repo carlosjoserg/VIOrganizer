@@ -9,7 +9,6 @@ import * as Contacts from "expo-contacts";
 
 /** react-navigation */
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 /** iconsets */
@@ -19,7 +18,7 @@ import { Foundation } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
-/** screens/components */
+/** screens */
 import News from "./screens/Noticias";
 import Salidas from "./screens/Salidas";
 import Refugios from "./screens/Refugios";
