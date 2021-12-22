@@ -252,11 +252,6 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		textAlign: 'center',
 	},
-	casa: {
-		margin: 24,
-		fontSize: 24,
-		textAlign: 'center',
-	},
 	selector: {
 		textAlign: 'center',
 		alignContent: 'center',
@@ -287,12 +282,6 @@ const styles = StyleSheet.create({
 	modalText: {
 		marginBottom: 15,
 		textAlign: "center"
-	},
-	modalNumber: {
-		marginBottom: 15,
-		textAlign: "center",
-		backgroundColor: "grey",
-		color: "white"
 	},
 	map: {
 		width: 300,
