@@ -1,11 +1,5 @@
 /** react */
 import * as React from "react";
-import { Text, View, StyleSheet } from "react-native";
-
-/** expo */
-import Constants from "expo-constants";
-import * as Device from "expo-device";
-import * as Contacts from "expo-contacts";
 
 /** react-navigation */
 import { NavigationContainer } from "@react-navigation/native";
@@ -23,6 +17,7 @@ import Salidas from "./screens/Salidas";
 import Refugios from "./screens/Refugios";
 import Perfil from "./screens/Perfil";
 
+/** translation */
 import I18n from "./i18n";
 
 const Tab = createMaterialBottomTabNavigator();
@@ -43,21 +38,56 @@ export default function App() {
 						},
 						tabBarIcon: ({ focused, color }): JSX.Element | undefined => {
 							if (route.name === "News") {
-								return <Ionicons name={focused ? "ios-information-circle" : "ios-information-circle-outline"} size={24} color={color} />;
+								return <Ionicons
+											name={focused ? "ios-information-circle" : "ios-information-circle-outline"}
+											size={24}
+											color={color}
+										/>;
 							} else if (route.name === "Trips") {
-								return <Foundation name={focused ? "guide-dog" : "guide-dog"} size={28} color={color} />;
+								return <Foundation
+											name={focused ? "guide-dog" : "guide-dog"}
+											size={28}
+											color={color} />;
 							} else if (route.name === "Shelters") {
-								return <MaterialCommunityIcons name={focused ? "shield-home" : "shield-home-outline"} size={24} color={color} />;
+								return <MaterialCommunityIcons
+											name={focused ? "shield-home" : "shield-home-outline"}
+											size={24}
+											color={color}
+										/>;
 							} else if (route.name === "Profile") {
-								return <FontAwesome name={focused ? "id-card" : "id-card-o"} size={20} color={color} />;
+								return <FontAwesome
+											name={focused ? "id-card" : "id-card-o"}
+											size={20}
+											color={color}
+										/>;
 							}
 						}
 					});
 				}}>
-				<Tab.Screen name="Profile" component={Perfil} options={{ title: "", tabBarLabel: I18n.t("perfil") }} />
-				<Tab.Screen name="Trips" component={Salidas} options={{ title: "", tabBarLabel: I18n.t("salidas") }} />
-				<Tab.Screen name="Shelters" component={Refugios} options={{ title: "", tabBarLabel: I18n.t("refugios") }} />
-				<Tab.Screen name="News" component={News} options={{ title: "", tabBarLabel: I18n.t("noticias"), tabBarBadge: 1 }} />
+
+				<Tab.Screen
+					name="Profile"
+					component={Perfil}
+					options={{ title: "", tabBarLabel: I18n.t("perfil") }}
+				/>
+
+				<Tab.Screen
+					name="Trips"
+					component={Salidas}
+					options={{ title: "", tabBarLabel: I18n.t("salidas") }}
+				/>
+
+				<Tab.Screen
+					name="Shelters"
+					component={Refugios}
+					options={{ title: "", tabBarLabel: I18n.t("refugios") }}
+				/>
+
+				<Tab.Screen
+					name="News"
+					component={News}
+					options={{ title: "", tabBarLabel: I18n.t("noticias"), tabBarBadge: 1 }}
+				/>
 			</Tab.Navigator>
 		</NavigationContainer>
 	);
