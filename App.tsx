@@ -9,11 +9,10 @@ import * as Contacts from "expo-contacts";
 
 /** react-navigation */
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 /** iconsets */
 import { Ionicons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -26,30 +25,32 @@ import Perfil from "./screens/Perfil";
 
 import I18n from "./i18n";
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 export default function App() {
 	return (
 		<NavigationContainer>
 			<Tab.Navigator
 				initialRouteName="Profile"
+				activeColor="tomato"
+				inactiveColor="gray"
+				shifting={false}
+				barStyle={{ backgroundColor: "white" }}
 				screenOptions={({ route }) => ({
 					headerStyle: {
 						height: 0
 					},
 					tabBarIcon: ({ focused, color, size }) => {
 						if (route.name === "News") {
-							return <Ionicons name={focused ? "ios-information-circle" : "ios-information-circle-outline"} size={32} color={color} />;
+							return <Ionicons name={focused ? "ios-information-circle" : "ios-information-circle-outline"} size={24} color={color} />;
 						} else if (route.name === "Trips") {
-							return <Foundation name={focused ? "guide-dog" : "guide-dog"} size={34} color={color} />;
+							return <Foundation name={focused ? "guide-dog" : "guide-dog"} size={28} color={color} />;
 						} else if (route.name === "Shelters") {
-							return <MaterialCommunityIcons name={focused ? "shield-home" : "shield-home-outline"} size={30} color={color} />;
+							return <MaterialCommunityIcons name={focused ? "shield-home" : "shield-home-outline"} size={24} color={color} />;
 						} else if (route.name === "Profile") {
-							return <FontAwesome name={focused ? "id-card" : "id-card-o"} size={24} color={color} />;
+							return <FontAwesome name={focused ? "id-card" : "id-card-o"} size={20} color={color} />;
 						}
-					},
-					tabBarActiveTintColor: "tomato",
-					tabBarInactiveTintColor: "gray",
+					}
 				})}>
 				<Tab.Screen name="Profile" component={Perfil} options={{ title: "", tabBarLabel: I18n.t("perfil") }} />
 				<Tab.Screen name="Trips" component={Salidas} options={{ title: "", tabBarLabel: I18n.t("salidas") }} />
