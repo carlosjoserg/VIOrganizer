@@ -36,22 +36,24 @@ export default function App() {
 				inactiveColor="gray"
 				shifting={false}
 				barStyle={{ backgroundColor: "white" }}
-				screenOptions={({ route }) => ({
-					headerStyle: {
-						height: 0
-					},
-					tabBarIcon: ({ focused, color, size }) => {
-						if (route.name === "News") {
-							return <Ionicons name={focused ? "ios-information-circle" : "ios-information-circle-outline"} size={24} color={color} />;
-						} else if (route.name === "Trips") {
-							return <Foundation name={focused ? "guide-dog" : "guide-dog"} size={28} color={color} />;
-						} else if (route.name === "Shelters") {
-							return <MaterialCommunityIcons name={focused ? "shield-home" : "shield-home-outline"} size={24} color={color} />;
-						} else if (route.name === "Profile") {
-							return <FontAwesome name={focused ? "id-card" : "id-card-o"} size={20} color={color} />;
+				screenOptions={({ route }) => {
+					return ({
+						headerStyle: {
+							height: 0
+						},
+						tabBarIcon: ({ focused, color }): JSX.Element | undefined => {
+							if (route.name === "News") {
+								return <Ionicons name={focused ? "ios-information-circle" : "ios-information-circle-outline"} size={24} color={color} />;
+							} else if (route.name === "Trips") {
+								return <Foundation name={focused ? "guide-dog" : "guide-dog"} size={28} color={color} />;
+							} else if (route.name === "Shelters") {
+								return <MaterialCommunityIcons name={focused ? "shield-home" : "shield-home-outline"} size={24} color={color} />;
+							} else if (route.name === "Profile") {
+								return <FontAwesome name={focused ? "id-card" : "id-card-o"} size={20} color={color} />;
+							}
 						}
-					}
-				})}>
+					});
+				}}>
 				<Tab.Screen name="Profile" component={Perfil} options={{ title: "", tabBarLabel: I18n.t("perfil") }} />
 				<Tab.Screen name="Trips" component={Salidas} options={{ title: "", tabBarLabel: I18n.t("salidas") }} />
 				<Tab.Screen name="Shelters" component={Refugios} options={{ title: "", tabBarLabel: I18n.t("refugios") }} />
