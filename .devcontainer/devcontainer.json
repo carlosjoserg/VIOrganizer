@@ -1,0 +1,15 @@
+{
+	"name": "viorganizer_container",
+	"image": "viorganizer/development",
+	"remoteUser": "developer",
+	"runArgs": [
+		"--net", "host",
+		"-p", "19006:19006",
+		"--name", "viroganizer_container",
+		"-e", "DISPLAY=${env:DISPLAY}",
+		"-v", "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+		],
+	"extensions": [],
+	"workspaceMount": "source=${localWorkspaceFolder},target=/home/developer/workspace,type=bind,consistency=cached",
+	"workspaceFolder": "/home/developer/workspace"
+}
