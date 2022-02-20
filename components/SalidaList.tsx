@@ -3,13 +3,9 @@ import { useState } from "react";
 import { Text, View, StyleSheet, FlatList, Image, Switch } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const current_mobile_phone = '606909265';
-
-import SalidasDato from "./DataTypes"
-
-const SALIDAS_DATA : SalidasDato[]= [
+const SALIDAS_DATA = [
 	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad53ab111a",
+		id: "bd7acbea-c1b1-46c2-aed5-3ad53ab11a",
 		title: "Salida #1",
 		refugio: "ASS",
 		fecha: "8-May-2021",
@@ -37,7 +33,7 @@ const SALIDAS_DATA : SalidasDato[]= [
 		confirmada: false
 	},
 	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad5333328ba",
+		id: "bd7acbea-c1b1-46c2-aed5-3ad533332dsd8ba",
 		title: "Salida #3",
 		refugio: "O",
 		fecha: "25-May-2021",
@@ -51,7 +47,7 @@ const SALIDAS_DATA : SalidasDato[]= [
 		confirmada: false
 	},
 	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad5344428ba",
+		id: "bd7acbea-c1b1-46c2-aed5",
 		title: "Salida #4",
 		refugio: "ASS",
 		fecha: "3-Jun-2021",
@@ -65,7 +61,7 @@ const SALIDAS_DATA : SalidasDato[]= [
 		confirmada: false
 	},
 	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad53a5558ba",
+		id: "bd7acbea-c1b1-46c2-aed5-sdgsd",
 		title: "Salida #5",
 		refugio: "ASS",
 		fecha: "7-Jul-2021",
@@ -80,9 +76,10 @@ const SALIDAS_DATA : SalidasDato[]= [
 	},
 ];
 
-const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
+
+const SALIDAS_APUNTADAS_DATA = [
 	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad5666b28ba",
+		id: "bd7acbea-c1b1-46c2-aed5-sdgsd",
 		title: "Salida #1",
 		refugio: "ASS",
 		fecha: "8-May-2021",
@@ -96,7 +93,7 @@ const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 		confirmada: false
 	},
 	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad5377728ba",
+		id: "bd7acbea-c1b1-46c2-aed5-gsrg",
 		title: "Salida #3",
 		refugio: "O",
 		fecha: "25-May-2021",
@@ -110,7 +107,7 @@ const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 		confirmada: false
 	},
 	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad53a8888ba",
+		id: "bd7acbea-c1b1-46c2-aefae-3ad53a8888ba",
 		title: "Salida #5",
 		refugio: "ASS",
 		fecha: "7-Jul-2021",
@@ -127,11 +124,20 @@ const SALIDAS_APUNTADAS_DATA : SalidasDato[] = [
 
 import Salida from "./SalidaCard";
 
-function SalidaList ({navigation}) {
+function SalidaList()
+{
 	const insets = useSafeAreaInsets();
-	const renderItem = ({ item }) => <Salida salida={item} />;
 	const [isEnabled, setIsEnabled] = useState(false);
-	const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+	function renderSalida({item})
+	{
+		return <Salida salida={item} />;
+	}
+	
+	function toggleSwitch(): any
+	{
+		return setIsEnabled((previousState) => !previousState);
+	}
 
 	return (
 		<View style={[{ flexDirection: "column" }, { marginTop: insets.top }, styles.overall]}>
@@ -150,11 +156,15 @@ function SalidaList ({navigation}) {
 				</View>
 			</View>
 
-			{isEnabled &&
-				<FlatList data={SALIDAS_APUNTADAS_DATA} renderItem={renderItem} keyExtractor={(item) => item.id} />
+			{
+				isEnabled &&
+
+				<FlatList data={SALIDAS_APUNTADAS_DATA} renderItem={renderSalida} keyExtractor={(item) => item.id} />
 			}
-			{!isEnabled &&
-				<FlatList data={SALIDAS_DATA} renderItem={renderItem} keyExtractor={(item) => item.id} />
+			{
+				!isEnabled &&
+
+				<FlatList data={SALIDAS_DATA} renderItem={renderSalida} keyExtractor={(item) => item.id} />
 			}
 
 		</View>
@@ -163,20 +173,25 @@ function SalidaList ({navigation}) {
 
 export default SalidaList;
 
-const styles = StyleSheet.create({
-	overall: {
+const styles = StyleSheet.create(
+{
+	overall:
+	{
 		marginBottom: 70
 	},
-	selector_text: {
+	selector_text:
+	{
 		textAlign: "right",
 		marginTop: 5,
 		marginRight: 5
 	},
-	selector_control: {
+	selector_control:
+	{
 		textAlign: "right",
 		marginRight: 50
 	},
-	vilogo: {
+	vilogo:
+	{
 		height: 50,
 		width: 50,
 		marginLeft: 40,
