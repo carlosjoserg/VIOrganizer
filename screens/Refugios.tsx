@@ -92,9 +92,9 @@ const Refugio = ({ refugio }) => (
 export default function Refugios()
 {
 	const renderItem = ({ item }) => <Refugio refugio={item} />;
-	// const insets = useSafeAreaInsets();
+	const insets = useSafeAreaInsets();
 	return (
-		<ScrollView style={[styles.scrollView]} stickyHeaderIndices={[0]}>
+		<ScrollView style={[{marginTop: insets.top}, styles.scrollView]} stickyHeaderIndices={[0]}>
 			{/* sticky header */}
 			<View style={[{ backgroundColor: "white" }, { alignItems: "center" }]}>
 				<Image style={styles.logo} source={require("../assets/logo.jpg")} />
