@@ -11,14 +11,17 @@ export default function News() {
 	);
 }
 
-const styles = StyleSheet.create({
-	container: {
+const styles = StyleSheet.create(
+{
+	container:
+	{
 		alignItems: 'center',
 		justifyContent: 'center',
 		padding: 24,
 		backgroundColor: 'white',
 	},
-	logo: {
+	logo:
+	{
 		height: 128,
 		width: 128,
 	}

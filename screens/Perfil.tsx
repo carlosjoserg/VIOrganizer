@@ -1,67 +1,61 @@
 import * as React from 'react';
-import { useState, useRef, useEffect } from 'react';
-import { Text, TextInput, View, StyleSheet, Image, Switch, Alert, Keyboard, TouchableOpacity, TouchableWithoutFeedback, Dimensions, InteractionManager} from 'react-native';
+import { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, Image, Switch, Alert, TouchableOpacity } from 'react-native';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Modal from "react-native-modal";
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import { Avatar } from "react-native-elements";
-import Dialog, { DialogButton, DialogContent } from 'react-native-popup-dialog';
 import NumericInput from 'react-native-numeric-input';
 
-import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
-
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { MaterialIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import firebase from "../lib/firebase";
 
-export default function Perfil() {
+export default function Perfil()
+{
 
 	{/** definir collección de roles y de usuarios, y las pantallas tendrán diferentes opciones de acuerdo a los roles */}
 	{/** Dummy struct to initialize the app, but useEffect overwrites these values as soon as it executes the snapshot */}
-	type userData = {
-		movil: string,
-		nombre: string,
-		casa: {latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number},
-		nro_socio: string,
-		roles: string[],
-		tengo_coche: boolean,
-		plazas_coche: number
-	};
 
-	const [state, setState] = useState({
-      movil: "",
-      nombre: "",
-      casa: {latitude: 0, longitude: 0, latitudeDelta: 0, longitudeDelta: 0},
-      nro_socio: "",
-      roles: [""],
-      tengo_coche: false,
-      plazas_coche: 0
-    });
+	const [state, setState] = useState(
+	{
+		movil: "",
+		nombre: "",
+		casa: {latitude: 0, longitude: 0, latitudeDelta: 0, longitudeDelta: 0},
+		nro_socio: "",
+		roles: [""],
+		tengo_coche: false,
+		plazas_coche: 0
+	});
 
 	{/** Firebase auth se encargará de verificar éste número, y a partir de allí, la app quedará registrada con ése número */}
 	const current_mobile_phone = '606909265';
-	const getUserById = async () => {
+	const getUserById = async () =>
+	{
 		const dbRef = firebase.db.collection("users").doc(current_mobile_phone);
 		const doc = await dbRef.get();
 		setState(doc.data());
 	};
 
 	{/** Only available to those with junta role */}
-	const createUser = async () => {
+	const createUser = async () =>
+	{
 		try {
 			await firebase.db.collection("users").add(state);
-		} catch (error) {
+		}
+		catch (error)
+		{
 			console.log(error)
 		}
 	};
 
-	const updateInfo = async () => {
+	const updateInfo = async () =>
+	{
 		const userRef = firebase.db.collection("users").doc(state.movil);
 		await userRef.set(state);
 	};
@@ -72,15 +66,21 @@ export default function Perfil() {
 
 	const insets = useSafeAreaInsets();
 
-	useEffect(() => {
-			firebase.db.collection("users").onSnapshot((querySnapshot) => {
-			const users = [];
-			querySnapshot.docs.forEach((doc) => {
-				if(  doc.data().movil === current_mobile_phone )
-					setState(doc.data());
+	useEffect(() =>
+	{
+			firebase.db.collection("users").onSnapshot((querySnapshot) =>
+			{
+				const users = [];
+				querySnapshot.docs.forEach((doc) =>
+				{
+					if(  doc.data().movil === current_mobile_phone )
+					{
+						setState(doc.data());
+					}
+				});
 			});
-		});
-	}, []);
+	},
+	[]);
 
 	return (
 		<View style={[{marginTop: insets.top}, {flexDirection: 'column'}, styles.container]}>
@@ -207,7 +207,9 @@ export default function Perfil() {
 				onValueChange={value => {setState({...state,tengo_coche: value});}}
 				value={state.tengo_coche} />
 
-				{state.tengo_coche && updateInfo() &&
+				{
+					state.tengo_coche && updateInfo() &&
+
 					<TouchableOpacity onPress={() => { setPlazasVisible(true);}}>
 						<View style={{flexDirection: 'row'}}>
 							<FontAwesome name="car" size={40} color='tomato' />
@@ -218,7 +220,9 @@ export default function Perfil() {
 
 				}
 
-				{!(state.tengo_coche) && updateInfo() &&
+				{
+					!(state.tengo_coche) && updateInfo() &&
+
 					<View style={{flexDirection: 'row'}}>
 						<FontAwesome name="car" size={40} color='lightgrey' />
 						<MaterialCommunityIcons name="car-seat" size={18} color="lightgrey" />
@@ -231,13 +235,16 @@ export default function Perfil() {
 	);
 }
 
-const styles = StyleSheet.create({
-	container: {
+const styles = StyleSheet.create(
+{
+	container:
+	{
 		alignItems: 'center',
 		justifyContent: 'center',
 		padding: 12,
 	},
-	socio: {
+	socio:
+	{
 		margin: 24,
 		fontSize: 24,
 		textAlign: 'center',
@@ -246,32 +253,37 @@ const styles = StyleSheet.create({
 		borderColor: '#20232a',
 		padding: 10,
 	},
-	nombre: {
+	nombre:
+	{
 		margin: 24,
 		fontSize: 24,
 		fontWeight: 'bold',
 		textAlign: 'center',
 	},
-	selector: {
+	selector:
+	{
 		textAlign: 'center',
 		alignContent: 'center',
 		alignItems: 'center',
 		margin: 20,
 	},
-	centeredView: {
+	centeredView:
+	{
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
 		marginTop: 22
 	},
-	modalView: {
+	modalView:
+	{
 		margin: 20,
 		backgroundColor: "white",
 		borderRadius: 20,
 		padding: 35,
 		alignItems: "center",
 		shadowColor: "#000",
-		shadowOffset: {
+		shadowOffset:
+		{
 			width: 0,
 			height: 2
 		},
@@ -279,15 +291,18 @@ const styles = StyleSheet.create({
 		shadowRadius: 4,
 		elevation: 5
 	},
-	modalText: {
+	modalText:
+	{
 		marginBottom: 15,
 		textAlign: "center"
 	},
-	map: {
+	map:
+	{
 		width: 300,
 		height: 400,
 	},
-	mapthumb: {
+	mapthumb:
+	{
 		width: 300,
 		height: 150,
 	},
