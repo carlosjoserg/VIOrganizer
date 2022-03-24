@@ -30,4 +30,7 @@ ENV PATH /home/developer/.npm-global/bin:$PATH
 RUN npm i --unsafe-perm -g npm@latest expo-cli@latest
 
 ## tunneling and building
-RUN npm i -g @expo/ngrok@^4.1.0 --force
+RUN npm i -g @expo/ngrok@^4.1.0
+
+## more dev tools
+RUN npm install i -g jest jest-expo
