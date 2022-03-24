@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Ionicons } from "@expo/vector-icons";
 
-function SalidaDetail ({route, navigation})
+function SalidaDetail ({route, navigation}): JSX.Element
 {
 	const insets = useSafeAreaInsets();
 	const salida = route.params.current_salida;
