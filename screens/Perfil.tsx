@@ -22,6 +22,8 @@ export default function Perfil()
 	{/** definir collección de roles y de usuarios, y las pantallas tendrán diferentes opciones de acuerdo a los roles */}
 	{/** Dummy struct to initialize the app, but useEffect overwrites these values as soon as it executes the snapshot */}
 
+	const [registered, setRegistered] = useState(false);
+
 	const [state, setState] = useState(
 	{
 		movil: "",
@@ -34,7 +36,7 @@ export default function Perfil()
 	});
 
 	{/** Firebase auth se encargará de verificar éste número, y a partir de allí, la app quedará registrada con ése número */}
-	const current_mobile_phone = '606909265';
+	const current_mobile_phone = firebase.firebase.auth().currentUser?.phoneNumber?.substring(3, 12); // '606909265'; // text.substr(3, 12);
 	const getUserById = async () =>
 	{
 		const dbRef = firebase.db.collection("users").doc(current_mobile_phone);
@@ -76,9 +78,13 @@ export default function Perfil()
 					if(  doc.data().movil === current_mobile_phone )
 					{
 						setState(doc.data());
+						setRegistered(true);
 					}
 				});
+
 			});
+
+			console.log("curren user mobile without country code: " + firebase.firebase.auth().currentUser?.phoneNumber?.substring(3,12));
 	},
 	[]);
 
@@ -169,6 +175,8 @@ export default function Perfil()
 			</Modal>
 		</View>
 
+		{ registered && 
+		<>
 		<TouchableOpacity onPress={() => {Alert.alert("Changing profile pic not implemented yet")}}>
 			<Avatar source={require('../assets/snack-icon.png')} rounded size="xlarge" />
 		</TouchableOpacity>
@@ -230,6 +238,8 @@ export default function Perfil()
 					</View>
 				}
 			</View>
+			</>
+			}
 
 		</View>
 	);
