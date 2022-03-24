@@ -71,7 +71,7 @@ const REFUGIOS_PUNTUAL_DATA = [
 ];
 
 const Refugio = ({ refugio }) => (
-	<TouchableOpacity onPress={() => Alert.alert("Informacion sobre " + {refugio}.nombre)}>
+	<TouchableOpacity onPress={() => Alert.alert("Informacion sobre " + refugio.nombre)}>
 		<View
 			style={
 				[
@@ -92,15 +92,15 @@ const Refugio = ({ refugio }) => (
 export default function Refugios()
 {
 	const renderItem = ({ item }) => <Refugio refugio={item} />;
-	const insets = useSafeAreaInsets();
+	//const insets = useSafeAreaInsets();
 	return (
-		<ScrollView style={[{marginTop: insets.top}, styles.scrollView]} stickyHeaderIndices={[0]}>
+		<View style={{marginTop: 46}}>
 			{/* sticky header */}
 			<View style={[{ backgroundColor: "white" }, { alignItems: "center" }]}>
 				<Image style={styles.logo} source={require("../assets/logo.jpg")} />
 			</View>
 
-			<View style={styles.container}>
+			<ScrollView style={styles.scrollView}>
 				<Text style={styles.paragraph}>Protectoras y entidades con actuaciones regulares</Text>
 				<FlatList
 					data={REFUGIOS_DATA}
@@ -109,21 +109,21 @@ export default function Refugios()
 					horizontal={false}
 					numColumns={2} />
 
-				<Text style={[{ margin: 30 }, styles.paragraph]}>Colaboraciones puntuales</Text>
+				<Text style={[{ marginTop: 30 }, styles.paragraph]}>Colaboraciones puntuales</Text>
 				<FlatList
 					data={REFUGIOS_PUNTUAL_DATA}
 					renderItem={renderItem}
 					keyExtractor={(item) => item.id}
 					horizontal={false}
 					numColumns={3} />
-			</View>
+			</ScrollView>
 
 			<View style={styles.userDiagnostics}>
 				<Text style={styles.userDiagnosticsText}>
 				{I18n.locale} {Constants.manifest.version} {Constants.manifest.revisionId}
 				</Text>
 			</View>
-		</ScrollView>
+		</View>
 	);
 }
 
@@ -137,13 +137,18 @@ const styles = StyleSheet.create(
 	},
 	paragraph:
 	{
+		marginTop: 18,
 		marginBottom: 30,
 		fontSize: 20,
 		textAlign: "center",
+		alignItems: "center",
+		justifyContent: "center",
 		width: "100%",
 		backgroundColor: "white",
 	},
-	scrollView: {},
+	scrollView: {
+		marginTop: 24,
+	},
 	logos:
 	{
 		height: 75,
