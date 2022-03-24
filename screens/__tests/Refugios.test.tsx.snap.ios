@@ -1,13 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Show refugios on screen 1`] = `
-<ScrollView
-  stickyHeaderIndices={
-    Array [
-      0,
-    ]
+<View
+  style={
+    Object {
+      "marginTop": 46,
+    }
   }
-  style={Object {}}
 >
   <View
     style={
@@ -34,22 +33,22 @@ exports[`Show refugios on screen 1`] = `
       }
     />
   </View>
-  <View
+  <ScrollView
     style={
       Object {
-        "alignItems": "center",
-        "justifyContent": "center",
         "marginTop": 24,
-        "padding": 10,
       }
     }
   >
     <Text
       style={
         Object {
+          "alignItems": "center",
           "backgroundColor": "white",
           "fontSize": 20,
+          "justifyContent": "center",
           "marginBottom": 30,
+          "marginTop": 18,
           "textAlign": "center",
           "width": "100%",
         }
@@ -93,12 +92,15 @@ exports[`Show refugios on screen 1`] = `
       style={
         Array [
           Object {
-            "margin": 30,
+            "marginTop": 30,
           },
           Object {
+            "alignItems": "center",
             "backgroundColor": "white",
             "fontSize": 20,
+            "justifyContent": "center",
             "marginBottom": 30,
+            "marginTop": 18,
             "textAlign": "center",
             "width": "100%",
           },
@@ -177,7 +179,7 @@ exports[`Show refugios on screen 1`] = `
       updateCellsBatchingPeriod={50}
       windowSize={21}
     />
-  </View>
+  </ScrollView>
   <View
     style={
       Object {
@@ -199,5 +201,5 @@ exports[`Show refugios on screen 1`] = `
        
     </Text>
   </View>
-</ScrollView>
+</View>
 `;
