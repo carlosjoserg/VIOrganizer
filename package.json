@@ -30,6 +30,7 @@
     "react-native-numeric-input": "^1.9.0",
     "react-native-paper": "4.9.2",
     "react-native-safe-area-context": "3.3.2",
+    "react-native-typeform-embed": "^1.0.4",
     "react-native-webview": "11.13.0"
   },
   "devDependencies": {

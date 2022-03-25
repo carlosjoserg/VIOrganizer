@@ -9,6 +9,8 @@ import { Marker } from 'react-native-maps';
 import { Avatar } from "react-native-elements";
 import NumericInput from 'react-native-numeric-input';
 
+import TypeformEmbed from "react-native-typeform-embed";
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -239,6 +241,18 @@ export default function Perfil()
 				}
 			</View>
 			</>
+			}
+
+			{
+				!registered &&
+
+				<>
+				<TypeformEmbed
+					url="https://voluntarioitinerante.typeform.com/to/WmY0YJ"
+					onSubmit={() => alert("Submitted!")}
+					onClose={() => alert("Closed!")}
+					/>
+				</>
 			}
 
 		</View>
