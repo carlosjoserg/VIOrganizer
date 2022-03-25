@@ -4,14 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Constants from "expo-constants";
 import I18n from "../i18n";
 
-interface RefugiosDato {
-	id: string;
-	refugio: string;
-	nombre: string;
-	ubicacion: string;
-}
-
-const REFUGIOS_DATA : RefugiosDato[] = [
+const REFUGIOS_DATA = [
 	{
 		id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba1",
 		refugio: "ASS",
@@ -26,7 +19,7 @@ const REFUGIOS_DATA : RefugiosDato[] = [
 	},
 ];
 
-const REFUGIOS_PUNTUAL_DATA : RefugiosDato[] = [
+const REFUGIOS_PUNTUAL_DATA = [
 	{
 		id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba3",
 		refugio: "O",
@@ -77,15 +70,17 @@ const REFUGIOS_PUNTUAL_DATA : RefugiosDato[] = [
 	},
 ];
 
-const Refugio = ({ refugio }: RefugiosDato) => (
-	<TouchableOpacity onPress={() => Alert.alert("Informacion sobre " + {refugio}.nombre)}>
+const Refugio = ({ refugio }) => (
+	<TouchableOpacity onPress={() => Alert.alert("Informacion sobre " + refugio.nombre)}>
 		<View
-			style={[
-				{ flexDirection: "row" },
-				{ justifyContent: "space-around" },
-				{ alignContent: "center" },
-				{ margin: 10 },
-			]}>
+			style={
+				[
+					{ flexDirection: "row" },
+					{ justifyContent: "space-around" },
+					{ alignContent: "center" },
+					{ margin: 10 },
+				]
+			} >
 			<View style={[{ flexDirection: "column" }, { justifyContent: "center" }, { alignContent: "center" }]}>
 				<Image style={styles.logos} source={require("../assets/snack-icon.png")} />
 				<Text style={styles.refugio}>{refugio.nombre}</Text>
@@ -94,83 +89,95 @@ const Refugio = ({ refugio }: RefugiosDato) => (
 	</TouchableOpacity>
 );
 
-export default function Refugios() {
-  const renderItem = ({ item }) => <Refugio refugio={item} />;
-  return (
-    <ScrollView style={styles.scrollView} stickyHeaderIndices={[0]}>
-      {/* sticky header */}
-      <View style={[{ backgroundColor: "white" }, { alignItems: "center" }]}>
-        <Image style={styles.logo} source={require("../assets/logo.jpg")} />
-      </View>
+export default function Refugios()
+{
+	const renderItem = ({ item }) => <Refugio refugio={item} />;
+	//const insets = useSafeAreaInsets();
+	return (
+		<View style={{marginTop: 46}}>
+			{/* sticky header */}
+			<View style={[{ backgroundColor: "white" }, { alignItems: "center" }]}>
+				<Image style={styles.logo} source={require("../assets/logo.jpg")} />
+			</View>
 
-      <View style={styles.container}>
-        <Text style={styles.paragraph}>Protectoras y entidades con actuaciones regulares</Text>
-        <FlatList
-          data={REFUGIOS_DATA}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          horizontal={false}
-          numColumns={2}
-        />
+			<ScrollView style={styles.scrollView}>
+				<Text style={styles.paragraph}>Protectoras y entidades con actuaciones regulares</Text>
+				<FlatList
+					data={REFUGIOS_DATA}
+					renderItem={renderItem}
+					keyExtractor={(item) => item.id}
+					horizontal={false}
+					numColumns={2} />
 
-        <Text style={[{ margin: 30 }, styles.paragraph]}>Colaboraciones puntuales</Text>
-        <FlatList
-          data={REFUGIOS_PUNTUAL_DATA}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          horizontal={false}
-          numColumns={3}
-        />
-      </View>
+				<Text style={[{ marginTop: 30 }, styles.paragraph]}>Colaboraciones puntuales</Text>
+				<FlatList
+					data={REFUGIOS_PUNTUAL_DATA}
+					renderItem={renderItem}
+					keyExtractor={(item) => item.id}
+					horizontal={false}
+					numColumns={3} />
+			</ScrollView>
 
-      <View style={styles.userDiagnostics}>
-        <Text style={styles.userDiagnosticsText}>
-          {I18n.locale} {Constants.manifest.version} {Constants.manifest.revisionId}
-        </Text>
-      </View>
-    </ScrollView>
-  );
+			<View style={styles.userDiagnostics}>
+				<Text style={styles.userDiagnosticsText}>
+				{I18n.locale} {Constants.manifest.version} {Constants.manifest.revisionId}
+				</Text>
+			</View>
+		</View>
+	);
 }
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 24,
-    padding: 10,
-  },
-  paragraph: {
-    marginBottom: 30,
-    fontSize: 20,
-    textAlign: "center",
-    width: "100%",
-    backgroundColor: "white",
-  },
-  scrollView: {},
-  logos: {
-    height: 75,
-    width: 75,
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 10,
-  },
-  userDiagnostics: {
-    alignSelf: "center",
-    paddingBottom: 30,
-  },
-  userDiagnosticsText: {
-    alignSelf: "center",
-    color: "gray",
-  },
-  logo: {
-    height: 128,
-    width: 128,
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 24,
-  },
-  refugio: {
-    fontSize: 16,
-    textAlign: "center",
-  },
+const styles = StyleSheet.create(
+{
+	container: {
+		alignItems: "center",
+		justifyContent: "center",
+		marginTop: 24,
+		padding: 10,
+	},
+	paragraph:
+	{
+		marginTop: 18,
+		marginBottom: 30,
+		fontSize: 20,
+		textAlign: "center",
+		alignItems: "center",
+		justifyContent: "center",
+		width: "100%",
+		backgroundColor: "white",
+	},
+	scrollView: {
+		marginTop: 24,
+	},
+	logos:
+	{
+		height: 75,
+		width: 75,
+		alignItems: "center",
+		justifyContent: "center",
+		margin: 10,
+	},
+	userDiagnostics:
+	{
+		alignSelf: "center",
+		paddingBottom: 30,
+	},
+	userDiagnosticsText:
+	{
+		alignSelf: "center",
+		color: "gray",
+	},
+	logo:
+	{
+		height: 128,
+		width: 128,
+		alignItems: "center",
+		justifyContent: "center",
+		margin: 24,
+	},
+	refugio:
+	{
+		fontSize: 16,
+		textAlign: "center",
+	},
 });

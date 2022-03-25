@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "viorganizer",
+    "owner": "viorganizer",
     "slug": "snack-cf47ae49-948d-4f51-9785-ec330965ac43",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -27,6 +28,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": ""
   }
 }
