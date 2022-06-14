@@ -1,6 +1,7 @@
+
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Image, Switch, Alert, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Image, Switch, TouchableOpacity} from 'react-native';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Modal from "react-native-modal";
@@ -9,7 +10,9 @@ import { Marker } from 'react-native-maps';
 import { Avatar } from "react-native-elements";
 import NumericInput from 'react-native-numeric-input';
 
-import TypeformEmbed from "react-native-typeform-embed";
+import * as ImagePicker from "expo-image-picker";
+
+import TypeformEmbed from "react-native-typeform-embed"
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Entypo } from '@expo/vector-icons';
@@ -17,6 +20,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import firebase from "../lib/firebase";
+
+
 
 export default function Perfil()
 {
@@ -37,8 +42,8 @@ export default function Perfil()
 		plazas_coche: 0
 	});
 
-	{/** Firebase auth se encargará de verificar éste número, y a partir de allí, la app quedará registrada con ése número */}
-	const current_mobile_phone = firebase.firebase.auth().currentUser?.phoneNumber?.substring(3, 12); // '606909265'; // text.substr(3, 12);
+	const [image, setImage] = useState(false);
+
 	const getUserById = async () =>
 	{
 		const dbRef = firebase.db.collection("users").doc(current_mobile_phone);
@@ -64,6 +69,40 @@ export default function Perfil()
 		await userRef.set(state);
 	};
 
+	const changeProfilePic = async () =>
+	{
+		const current_mobile_phone = firebase.firebase.auth().currentUser?.phoneNumber?.substring(3, 12); // '606909265'; // text.substr(3, 12);
+		let pickerResult = await ImagePicker.launchImageLibraryAsync({
+			allowsEditing: true,
+			aspect: [1, 1],
+		});
+		console.log("just picking... ");
+		//
+		console.log(pickerResult);
+
+		if (!pickerResult.cancelled && pickerResult.type === 'image')
+		{
+			// const uploadUrl = await uploadImageAsync();
+			console.log(pickerResult.uri);
+			const response = await fetch(pickerResult.uri);
+			const blob = await response.blob();
+			const storageRef = await firebase.storage.ref("avatar-" + current_mobile_phone).put(blob).then(
+				console.log("blob uploaded")
+			)
+
+			let imageRef = firebase.storage.ref("avatar-" + current_mobile_phone);
+			imageRef
+				.getDownloadURL()
+				.then((url) => {
+					setImage({ profileimageUrl: url});
+				})
+				.catch((e) => console.log('getting downloadURL of image error => ', e));
+
+			// console.log(image.profileimageUrl)
+		}
+	}
+
+
 	{/** modal/edit controls */}
 	const [plazasVisible, setPlazasVisible] = useState([]);
 	const [casaVisible, setCasaVisible] = useState([]);
@@ -72,21 +111,34 @@ export default function Perfil()
 
 	useEffect(() =>
 	{
+			const current_mobile_phone = firebase.firebase.auth().currentUser?.phoneNumber?.substring(3, 12); // '606909265'; // text.substr(3, 12);
+
 			firebase.db.collection("users").onSnapshot((querySnapshot) =>
 			{
 				const users = [];
 				querySnapshot.docs.forEach((doc) =>
 				{
-					if(  doc.data().movil === current_mobile_phone )
+					console.log('querying docs...');
+					console.log(doc.id);
+					if(  doc.id === current_mobile_phone )
 					{
 						setState(doc.data());
 						setRegistered(true);
+						console.log('registered user');
 					}
 				});
 
 			});
 
-			console.log("curren user mobile without country code: " + firebase.firebase.auth().currentUser?.phoneNumber?.substring(3,12));
+			let imageRef = firebase.storage.ref("avatar-" + current_mobile_phone);
+			imageRef
+				.getDownloadURL()
+				.then((url) => {
+					setImage({ profileimageUrl: url});
+				})
+				.catch((e) => console.log('getting downloadURL of image error => ', e));
+
+			// console.log("curren user mobile without country code: " + firebase.firebase.auth().currentUser?.phoneNumber?.substring(3,12));
 	},
 	[]);
 
@@ -179,8 +231,8 @@ export default function Perfil()
 
 		{ registered && 
 		<>
-		<TouchableOpacity onPress={() => {Alert.alert("Changing profile pic not implemented yet")}}>
-			<Avatar source={require('../assets/snack-icon.png')} rounded size="xlarge" />
+		<TouchableOpacity onPress={changeProfilePic}>
+			<Avatar source={{uri: image.profileimageUrl}} rounded size="xlarge" />
 		</TouchableOpacity>
 		<Text style={styles.nombre}>{state.nombre}</Text>
 

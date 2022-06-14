@@ -1,133 +1,18 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, FlatList, Image, Switch } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const SALIDAS_DATA = [
-	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad53ab11a",
-		title: "Salida #1",
-		refugio: "ASS",
-		fecha: "8-May-2021",
-		hora: "14:00",
-		referente: "Marta",
-		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: 20,
-		personas_inscritas: ["606909265"],
-		coches_inscritos: 2,
-		asientos_libres: 5,
-		confirmada: false
-	},
-	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad53a2228ba",
-		title: "Salida #2",
-		refugio: "SO",
-		fecha: "21-May-2021",
-		hora: "14:00",
-		referente: "Jordi",
-		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: 5,
-		personas_inscritas: [],
-		coches_inscritos: 0,
-		asientos_libres: 0,
-		confirmada: false
-	},
-	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad533332dsd8ba",
-		title: "Salida #3",
-		refugio: "O",
-		fecha: "25-May-2021",
-		hora: "14:00",
-		referente: "Jaime",
-		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: 20,
-		personas_inscritas: [],
-		coches_inscritos: 3,
-		asientos_libres: 9,
-		confirmada: false
-	},
-	{
-		id: "bd7acbea-c1b1-46c2-aed5",
-		title: "Salida #4",
-		refugio: "ASS",
-		fecha: "3-Jun-2021",
-		hora: "14:00",
-		referente: "Marta",
-		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: 2,
-		personas_inscritas: [],
-		coches_inscritos: 1,
-		asientos_libres: 0,
-		confirmada: false
-	},
-	{
-		id: "bd7acbea-c1b1-46c2-aed5-sdgsd",
-		title: "Salida #5",
-		refugio: "ASS",
-		fecha: "7-Jul-2021",
-		hora: "14:00",
-		referente: "Marta",
-		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: 10,
-		personas_inscritas: [],
-		coches_inscritos: 2,
-		asientos_libres: 5,
-		confirmada: false
-	},
-];
-
-
-const SALIDAS_APUNTADAS_DATA = [
-	{
-		id: "bd7acbea-c1b1-46c2-aed5-sdgsd",
-		title: "Salida #1",
-		refugio: "ASS",
-		fecha: "8-May-2021",
-		hora: "14:00",
-		referente: "Marta",
-		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: 10,
-		personas_inscritas: [],
-		coches_inscritos: 2,
-		asientos_libres: 5,
-		confirmada: false
-	},
-	{
-		id: "bd7acbea-c1b1-46c2-aed5-gsrg",
-		title: "Salida #3",
-		refugio: "O",
-		fecha: "25-May-2021",
-		hora: "14:00",
-		referente: "Jaime",
-		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: 20,
-		personas_inscritas: [],
-		coches_inscritos: 3,
-		asientos_libres: 9,
-		confirmada: false
-	},
-	{
-		id: "bd7acbea-c1b1-46c2-aefae-3ad53a8888ba",
-		title: "Salida #5",
-		refugio: "ASS",
-		fecha: "7-Jul-2021",
-		hora: "14:00",
-		referente: "Marta",
-		tareas: ["1. Limpiar jaulas", "2. Pasear perros", "3. Vacunación"],
-		personas_necesarias: 10,
-		personas_inscritas: [],
-		coches_inscritos: 2,
-		asientos_libres: 5,
-		confirmada: false
-	},
-];
-
+import firebase from "../lib/firebase";
 import Salida from "./SalidaCard";
 
-function SalidaList()
+function SalidaList({route, navigation})
 {
 	const insets = useSafeAreaInsets();
+	const [isFetching, setIsFetching] = useState(false);
 	const [isEnabled, setIsEnabled] = useState(false);
+	const [SALIDAS_DATA, SetSalidas] = useState([]);
+	const [SALIDAS_APUNTADAS_DATA, SetSalidasApuntadas] = useState([]);
 
 	function renderSalida({item})
 	{
@@ -136,12 +21,13 @@ function SalidaList()
 	
 	function toggleSwitch(): any
 	{
-		return setIsEnabled((previousState) => !previousState);
+		setIsEnabled((previousState) => !previousState);
+		updateSalidas();
+		return;
 	}
 
-	return (
-		<View style={[{ flexDirection: "column" }, { marginTop: insets.top }, styles.overall]}>
-			<View style={[{ flexDirection: "row" }, { justifyContent: "space-around" }, { backgroundColor: "white" }]}>
+	const Header = () => (
+		<View style={[{ flexDirection: "row" }, { justifyContent: "space-around" }, { backgroundColor: "white" }]}>
 				<Image style={styles.vilogo} source={require("../assets/logo.jpg")} />
 				<View style={[{ flexDirection: "row" }, {alignItems:'center'}]}>
 					<Text style={styles.selector_text}>Mis salidas</Text>
@@ -155,18 +41,61 @@ function SalidaList()
 					/>
 				</View>
 			</View>
+	)
 
+	function updateSalidas()
+	{
+		firebase.db.collection("salidas").onSnapshot((querySnapshot) =>
+		{
+			let SALIDAS_DATA_QUERY = [];
+			let SALIDAS_APUNTADAS_DATA_QUERY = [];
+			querySnapshot.docs.forEach((doc) =>
 			{
-				isEnabled &&
+				SALIDAS_DATA_QUERY.push(doc);
+				/*doc.data().personas_inscritas?.forEach( (mobile) =>
+				{
+					if( mobile === firebase.firebase.auth().currentUser?.phoneNumber?.substring(3, 12) )
+					{
+						SALIDAS_APUNTADAS_DATA_QUERY.push(doc.data());
+					}
+				});*/
+			});
 
-				<FlatList data={SALIDAS_APUNTADAS_DATA} renderItem={renderSalida} keyExtractor={(item) => item.id} />
-			}
-			{
-				!isEnabled &&
+			SetSalidas(SALIDAS_DATA_QUERY);
+			// SetSalidasApuntadas(SALIDAS_APUNTADAS_DATA_QUERY);
+		});
+	}
 
-				<FlatList data={SALIDAS_DATA} renderItem={renderSalida} keyExtractor={(item) => item.id} />
-			}
+	const onRefresh = async () => {
+		setIsFetching(true);
+		updateSalidas();
+		setIsFetching(false);
+		console.log("refreshing");
+	};
 
+	useEffect(() =>
+	{
+		updateSalidas();
+		navigation.addListener('tabPress', (e) => {
+			console.log("update salidas");
+			updateSalidas();
+		});
+	},
+	[]);
+
+	return (
+		<View style={[{ flexDirection: "column" }, { marginTop: insets.top }, styles.overall]}>
+			<FlatList
+				data={SALIDAS_DATA}
+				onRefresh={onRefresh}
+				renderItem={renderSalida}
+				refreshing={isFetching}
+				extraData={SALIDAS_DATA}
+				keyExtractor={(item) => item.id}
+				ListHeaderComponent={() => (
+					<Header />
+				)}
+			/>
 		</View>
 	);
 }
@@ -197,7 +126,6 @@ const styles = StyleSheet.create(
 		marginLeft: 40,
 		marginTop: 20,
 		marginBottom: 10,
-		textAlign: "left",
 		alignContent: "center",
 		alignItems: "center"
 	}

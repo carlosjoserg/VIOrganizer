@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, View, StyleSheet, Image, ScrollView, FlatList, TouchableOpacity, Alert } from "react-native";
+import { Text, View, StyleSheet, Image, SectionList, TouchableOpacity, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Constants from "expo-constants";
 import I18n from "../i18n";
@@ -70,6 +70,17 @@ const REFUGIOS_PUNTUAL_DATA = [
 	},
 ];
 
+const DATA = [
+	{
+		title: 'Protectoras y entidades con actuaciones regulares',
+		data: REFUGIOS_DATA
+	},
+	{
+		title: 'Colaboraciones puntuales',
+		data: REFUGIOS_PUNTUAL_DATA
+	}
+]
+
 const Refugio = ({ refugio }) => (
 	<TouchableOpacity onPress={() => Alert.alert("Informacion sobre " + refugio.nombre)}>
 		<View
@@ -100,23 +111,13 @@ export default function Refugios()
 				<Image style={styles.logo} source={require("../assets/logo.jpg")} />
 			</View>
 
-			<ScrollView style={styles.scrollView}>
-				<Text style={styles.paragraph}>Protectoras y entidades con actuaciones regulares</Text>
-				<FlatList
-					data={REFUGIOS_DATA}
-					renderItem={renderItem}
-					keyExtractor={(item) => item.id}
-					horizontal={false}
-					numColumns={2} />
-
-				<Text style={[{ marginTop: 30 }, styles.paragraph]}>Colaboraciones puntuales</Text>
-				<FlatList
-					data={REFUGIOS_PUNTUAL_DATA}
-					renderItem={renderItem}
-					keyExtractor={(item) => item.id}
-					horizontal={false}
-					numColumns={3} />
-			</ScrollView>
+			<SectionList
+				sections={DATA}
+				renderItem={renderItem}
+				keyExtractor={(item, index) => item + index}
+				horizontal={false}
+				renderSectionHeader={({ section: { title } }) => <Text style={styles.paragraph}>{title}</Text>}
+				/>
 
 			<View style={styles.userDiagnostics}>
 				<Text style={styles.userDiagnosticsText}>
@@ -140,7 +141,7 @@ const styles = StyleSheet.create(
 		marginTop: 18,
 		marginBottom: 30,
 		fontSize: 20,
-		textAlign: "center",
+		textAlign: "left",
 		alignItems: "center",
 		justifyContent: "center",
 		width: "100%",

@@ -1,10 +1,12 @@
 /** react */
 import * as React from "react";
+import { useState, useEffect } from 'react';
 import { Text, TextInput } from "react-native-paper";
 import { View, Image, StyleSheet, Button, TouchableOpacity } from "react-native";
 
 /** react-navigation */
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator} from '@react-navigation/native-stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 /** iconsets */
@@ -15,7 +17,8 @@ import { FontAwesome } from "@expo/vector-icons";
 
 /** screens */
 import News from "./screens/Noticias";
-import Salidas from "./screens/Salidas";
+import SalidaList from "./components/SalidaList";
+import SalidaDetail from "./components/SalidaDetail";
 import Refugios from "./screens/Refugios";
 import Perfil from "./screens/Perfil";
 
@@ -27,6 +30,10 @@ import firebase from "./lib/firebase";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 
 const Tab = createMaterialBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+
+
 
 export default function App() {
 
@@ -39,15 +46,109 @@ export default function App() {
 
 	const firebaseConfig = firebase.firebase.app().options;
 
-	const [message, showMessage] = React.useState((!firebaseConfig || Platform.OS === 'web')
-    ? { text: ""}
-    : undefined);
+	const [message, showMessage] = React.useState((!firebaseConfig || Platform.OS === 'web')? { text: ""} : undefined);
+
+	function checkSignInStatus()
+	{
+		firebase.firebase.auth().onAuthStateChanged(function(user) {
+			if(user)
+			{
+				setFristRun(false);
+				setsentCode(true);
+			}
+			else
+			{
+				setFristRun(true);
+				setsentCode(false);
+			}
+		});
+	}
+
+	function Home() {
+
+		return(<Tab.Navigator
+			initialRouteName="Profile"
+			activeColor="tomato"
+			inactiveColor="gray"
+			shifting={false}
+			barStyle={{ backgroundColor: "white" }}
+			screenOptions={({ route }) => {
+				return ({
+					headerStyle: {
+						height: 0
+					},
+					tabBarIcon: ({ focused, color }): JSX.Element | undefined => {
+						if (route.name === "News") {
+							return <Ionicons
+										name={focused ? "ios-information-circle" : "ios-information-circle-outline"}
+										size={24}
+										color={color}
+									/>;
+						} else if (route.name === "Trips") {
+							return <Foundation
+										name={focused ? "guide-dog" : "guide-dog"}
+										size={28}
+										color={color} />;
+						} else if (route.name === "Shelters") {
+							return <MaterialCommunityIcons
+										name={focused ? "shield-home" : "shield-home-outline"}
+										size={24}
+										color={color}
+									/>;
+						} else if (route.name === "Profile") {
+							return <FontAwesome
+										name={focused ? "id-card" : "id-card-o"}
+										size={20}
+										color={color}
+									/>;
+						}
+					}
+				});
+			}}>
+
+			<Tab.Screen
+				name="Profile"
+				component={Perfil}
+				options={{ title: "", tabBarLabel: I18n.t("perfil") }}
+			/>
+
+			<Tab.Screen
+				name="Trips"
+				component={SalidaList}
+				options={{ title: "", tabBarLabel: I18n.t("salidas") }}
+			/>
+
+			<Tab.Screen
+				name="Shelters"
+				component={Refugios}
+				options={{ title: "", tabBarLabel: I18n.t("refugios") }}
+			/>
+
+			<Tab.Screen
+				name="News"
+				component={News}
+				options={{ title: "", tabBarLabel: I18n.t("noticias"), tabBarBadge: 1 }}
+			/>
+
+		</Tab.Navigator>)
+	}
+
+	useEffect(() =>
+	{
+		checkSignInStatus();
+		if( firebase.firebase.auth().currentUser?.phoneNumber )
+		{
+			setFristRun(false);
+			setsentCode(true);
+		}
+	},
+	[]);
 
 	return (
 		<NavigationContainer>
 
 			{
-				firstRun && 
+				firstRun &&
 				<>
 				<FirebaseRecaptchaVerifierModal
 						ref={recaptchaVerifier}
@@ -61,12 +162,12 @@ export default function App() {
 			}
 
 			{
-				firstRun && !sentCode && 
+				firstRun && !sentCode &&
 
 				<>
 
 				<Text style={{ marginTop: 46, fontSize: 14, textAlign: 'center' }}>Primera vez usando la app? Abre sesión con tu móvil:</Text>
-				
+
 				<TextInput
 					style={{ marginVertical: 10, fontSize: 25, textAlign: 'center' }}
 					placeholder="+34?????????"
@@ -74,30 +175,34 @@ export default function App() {
 					autoCompleteType="tel"
 					keyboardType="phone-pad"
 					textContentType="telephoneNumber"
-					onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)} />
-				
+					onChangeText={(phoneNumber) => {
+						setPhoneNumber(phoneNumber);
+						checkSignInStatus();
+						}
+					} />
+
 				<Button
 					title="Enviar código de verificación"
 					disabled={!phoneNumber && !verificationId}
 					onPress={
 						async () => {
-						// The FirebaseRecaptchaVerifierModal ref implements the
-						// FirebaseAuthApplicationVerifier interface and can be
-						// passed directly to `verifyPhoneNumber`.
-						try
-						{
-							console.log("sending verification code to " + phoneNumber);
-							const phoneProvider = firebase.auth_provider;
-							const verificationId = await phoneProvider.verifyPhoneNumber( phoneNumber, recaptchaVerifier.current );
-							setVerificationId(verificationId);
-							showMessage({ text: "Verification code has been sent to your phone." });
-							setsentCode(true);
-						}
-						catch (err)
-						{
-							showMessage({ text: `Error: ${err.message}`, color: "red" });
-							console.log(`${err.message}`)
-						}
+							// The FirebaseRecaptchaVerifierModal ref implements the
+							// FirebaseAuthApplicationVerifier interface and can be
+							// passed directly to `verifyPhoneNumber`.
+							try
+							{
+								// console.log("sending verification code to " + phoneNumber);
+								const phoneProvider = firebase.auth_provider;
+								const verificationId = await phoneProvider.verifyPhoneNumber( phoneNumber, recaptchaVerifier.current );
+								setVerificationId(verificationId);
+								showMessage({ text: "Verification code has been sent to your phone." });
+								setsentCode(true);
+							}
+							catch (err)
+							{
+								showMessage({ text: `Error: ${err.message}`, color: "red" });
+								console.log(`${err.message}`)
+							}
 						}
 					} />
 
@@ -115,7 +220,7 @@ export default function App() {
 
 			{
 				firstRun && sentCode &&
-				
+
 				<>
 				<Text style={{ marginTop: 20, textAlign: 'center', fontSize: 14}}>Introduce Código de Verificación</Text>
 
@@ -147,8 +252,9 @@ export default function App() {
 
 				<Text style={{ marginTop: 2, textAlign: 'center', fontSize: 2}}></Text>
 				<Button
-					
+
 					title="Cancelar"
+					color="grey"
 					disabled={!verificationId}
 					onPress={async () => {
 						try
@@ -177,70 +283,27 @@ export default function App() {
 			{
 				!firstRun &&
 
-				<Tab.Navigator
-					initialRouteName="Profile"
-					activeColor="tomato"
-					inactiveColor="gray"
-					shifting={false}
-					barStyle={{ backgroundColor: "white" }}
-					screenOptions={({ route }) => {
-						return ({
-							headerStyle: {
-								height: 0
-							},
-							tabBarIcon: ({ focused, color }): JSX.Element | undefined => {
-								if (route.name === "News") {
-									return <Ionicons
-												name={focused ? "ios-information-circle" : "ios-information-circle-outline"}
-												size={24}
-												color={color}
-											/>;
-								} else if (route.name === "Trips") {
-									return <Foundation
-												name={focused ? "guide-dog" : "guide-dog"}
-												size={28}
-												color={color} />;
-								} else if (route.name === "Shelters") {
-									return <MaterialCommunityIcons
-												name={focused ? "shield-home" : "shield-home-outline"}
-												size={24}
-												color={color}
-											/>;
-								} else if (route.name === "Profile") {
-									return <FontAwesome
-												name={focused ? "id-card" : "id-card-o"}
-												size={20}
-												color={color}
-											/>;
-								}
-							}
-						});
-					}}>
+				<Stack.Navigator
+					initialRouteName="Home"
+					screenOptions={
+						{
+							headerShown: false
+						}
+					}
+				>
 
-					<Tab.Screen
-						name="Profile"
-						component={Perfil}
-						options={{ title: "", tabBarLabel: I18n.t("perfil") }}
-					/>
+					<Stack.Screen
+							name="Home"
+							component={Home}
+							options={{ title: ""}}
+						/>
 
-					<Tab.Screen
-						name="Trips"
-						component={Salidas}
-						options={{ title: "", tabBarLabel: I18n.t("salidas") }}
-					/>
-
-					<Tab.Screen
-						name="Shelters"
-						component={Refugios}
-						options={{ title: "", tabBarLabel: I18n.t("refugios") }}
-					/>
-
-					<Tab.Screen
-						name="News"
-						component={News}
-						options={{ title: "", tabBarLabel: I18n.t("noticias"), tabBarBadge: 1 }}
-					/>
-				</Tab.Navigator>
+					<Stack.Screen
+							name="SalidaDetail"
+							component={SalidaDetail}
+							options={{ title: ""}}
+						/>
+				</Stack.Navigator>
 			}
 		</NavigationContainer>
 	);
